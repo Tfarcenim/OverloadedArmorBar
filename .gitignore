@@ -1,0 +1,13 @@
+# Directories
+/.gradle
+
+# Build Files
+/build
+/run
+/out
+
+#Intelij
+/*.iws
+/*.iml
+/*.ipr
+/.idea
