@@ -1,6 +1,6 @@
 package locusway.overpoweredarmorbar.overlay;
 
-import locusway.overpoweredarmorbar.Config;
+import locusway.overpoweredarmorbar.ModConfig;
 
 /*
     Class manages the calculations required to determine the correct color(s) to use
@@ -17,6 +17,7 @@ public class ArmorBar
             currentScale = colors.length - 1;
         }
 
+        //Previous scale is -1 between 0 and 20 points of armor, so reset to 0 for sane value
         if (previousScale < 0)
         {
             previousScale = 0;
@@ -64,7 +65,7 @@ public class ArmorBar
         for (int i = 0; i < 10; i++)
         {
             armorIcons[i] = new ArmorIcon();
-            setArmorIconColor(armorIcons[i], Config.colorValues, scale, counter);
+            setArmorIconColor(armorIcons[i], ModConfig.colorValues, scale, counter);
             if (counter >= 2)
             {
                 //We have at least a full icon to show

@@ -36,6 +36,6 @@ public class ArmorIcon
     {
         NONE,
         HALF,
-        FULL;
+        FULL
     }
 }

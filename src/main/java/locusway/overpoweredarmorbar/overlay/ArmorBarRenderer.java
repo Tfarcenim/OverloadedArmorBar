@@ -1,6 +1,6 @@
 package locusway.overpoweredarmorbar.overlay;
 
-import locusway.overpoweredarmorbar.Config;
+import locusway.overpoweredarmorbar.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.opengl.GL11;
@@ -10,7 +10,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class ArmorBarRenderer extends Gui
 {
-    private int previousArmorValue = -1;
+    private final static int UNKNOWN_ARMOR_VALUE = -1;
+    private int previousArmorValue = UNKNOWN_ARMOR_VALUE;
 
     private final static int BAR_HEIGHT = 9;
     private final static int ARMOR_ICON_SIZE = 9;
@@ -31,7 +32,7 @@ public class ArmorBarRenderer extends Gui
         int currentArmorValue = mc.player.getTotalArmorValue();
 
         //Hide armor bar if player is not wearing armor unless they have config requesting it
-        if (currentArmorValue == 0 && !Config.alwaysShowArmorBar)
+        if (currentArmorValue == 0 && !ModConfig.alwaysShowArmorBar)
         {
             return;
         }
@@ -75,7 +76,7 @@ public class ArmorBarRenderer extends Gui
                     }
                     else
                     {
-                        if(Config.showEmptyArmorIcons)
+                        if(ModConfig.showEmptyArmorIcons)
                         {
                             //Draw the empty armor icon
                             drawTexturedModalRect(positionCounter, 0, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
@@ -115,5 +116,11 @@ public class ArmorBarRenderer extends Gui
         //Revert our state back
         GL11.glPopMatrix();
         GL11.glPopAttrib();
+    }
+
+    public void forceUpdate()
+    {
+        //Setting to unknown value will cause a refresh next render
+        previousArmorValue = UNKNOWN_ARMOR_VALUE;
     }
 }

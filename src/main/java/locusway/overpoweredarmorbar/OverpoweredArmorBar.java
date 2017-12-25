@@ -14,7 +14,7 @@ public class OverpoweredArmorBar
 
     public static final String MODID = "overpoweredarmorbar";
     public static final String MODNAME = "Overpowered Armor Bar";
-    public static final String MODVERSION = "0.1.0";
+    public static final String MODVERSION = "0.2.0";
 
     @SidedProxy(clientSide = "locusway.overpoweredarmorbar.proxy.ClientProxy", serverSide = "locusway.overpoweredarmorbar.proxy.ServerProxy")
     public static CommonProxy proxy;
@@ -32,14 +32,14 @@ public class OverpoweredArmorBar
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent e)
+    public void init(FMLInitializationEvent event)
     {
-        proxy.init(e);
+        proxy.init(event);
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e)
+    public void postInit(FMLPostInitializationEvent event)
     {
-        proxy.postInit(e);
+        proxy.postInit(event);
     }
 }

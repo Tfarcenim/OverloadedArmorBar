@@ -1,4 +1,4 @@
-# Overpowed Armor Bar
+# Overpowered Armor Bar
 The vanilla armor bar doesn't accurately show "better than diamond" level armor, as it simply maxes out when its full.
 
 This mod allows armor values over 20 to be displayed as different colored (configurable) icons depending on how many times you fill the bar.
