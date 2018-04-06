@@ -8,13 +8,13 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = OverpoweredArmorBar.MODID, name = OverpoweredArmorBar.MODNAME, version = OverpoweredArmorBar.MODVERSION, useMetadata = true)
+@Mod(modid = OverpoweredArmorBar.MODID, name = OverpoweredArmorBar.MODNAME, version = OverpoweredArmorBar.MODVERSION, useMetadata = true, clientSideOnly = true)
 public class OverpoweredArmorBar
 {
 
     public static final String MODID = "overpoweredarmorbar";
     public static final String MODNAME = "Overpowered Armor Bar";
-    public static final String MODVERSION = "0.2.0";
+    public static final String MODVERSION = "0.2.1";
 
     @SidedProxy(clientSide = "locusway.overpoweredarmorbar.proxy.ClientProxy", serverSide = "locusway.overpoweredarmorbar.proxy.ServerProxy")
     public static CommonProxy proxy;

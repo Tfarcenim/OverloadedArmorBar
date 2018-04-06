@@ -3,7 +3,10 @@ package locusway.overpoweredarmorbar.overlay;
 import locusway.overpoweredarmorbar.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.potion.PotionEffect;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Collection;
 
 /*
     Class handles the drawing of the armor bar
@@ -30,6 +33,16 @@ public class ArmorBarRenderer extends Gui
     public void renderArmorBar(int screenWidth, int screenHeight)
     {
         int currentArmorValue = mc.player.getTotalArmorValue();
+
+        int armorBarPotionEffectOffset = 0;
+        Collection<PotionEffect> currentEffects = mc.player.getActivePotionEffects();
+        for (PotionEffect potionEffect: currentEffects)
+        {
+            if(potionEffect.getPotion().getName().equals("effect.absorption"))
+            {
+                armorBarPotionEffectOffset = BAR_HEIGHT + 1;
+            }
+        }
 
         //Hide armor bar if player is not wearing armor unless they have config requesting it
         if (currentArmorValue == 0 && !ModConfig.alwaysShowArmorBar)
@@ -59,7 +72,7 @@ public class ArmorBarRenderer extends Gui
         /* Shift our rendering origin to just above the experience bar
          * The top left corner of the screen is x=0, y=0
          */
-        GL11.glTranslatef(vanillaExpLeftX, vanillaExpTopY - BAR_SPACING_ABOVE_EXP_BAR - BAR_HEIGHT, 0);
+        GL11.glTranslatef(vanillaExpLeftX, vanillaExpTopY - BAR_SPACING_ABOVE_EXP_BAR - BAR_HEIGHT - armorBarPotionEffectOffset , 0);
 
         int positionCounter = 0;
         for (ArmorIcon icon : armorIcons)
