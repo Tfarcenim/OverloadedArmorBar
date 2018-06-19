@@ -3,7 +3,7 @@ package locusway.overpoweredarmorbar.proxy;
 import locusway.overpoweredarmorbar.EventConfigChanged;
 import locusway.overpoweredarmorbar.OverpoweredArmorBar;
 import locusway.overpoweredarmorbar.overlay.OverlayEventHandler;
-import locusway.overpoweredarmorbar.overlay.ArmorBarRenderer;
+import locusway.overpoweredarmorbar.overlay.armorbar.ArmorBarRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;

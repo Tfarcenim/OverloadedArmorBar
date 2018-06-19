@@ -1,6 +1,8 @@
-package locusway.overpoweredarmorbar.overlay;
+package locusway.overpoweredarmorbar.overlay.armorbar;
 
 import locusway.overpoweredarmorbar.ModConfig;
+import locusway.overpoweredarmorbar.overlay.Icon;
+import locusway.overpoweredarmorbar.overlay.IconColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.SharedMonsterAttributes;

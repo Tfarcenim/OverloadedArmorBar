@@ -1,5 +1,7 @@
 package locusway.overpoweredarmorbar.overlay;
 
+import locusway.overpoweredarmorbar.ModConfig;
+import locusway.overpoweredarmorbar.overlay.armorbar.ArmorBarRenderer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -18,15 +20,18 @@ public class OverlayEventHandler
     @SubscribeEvent(receiveCanceled = true)
     public void onRenderGameOverlayEventPre(RenderGameOverlayEvent.Pre event)
     {
+        int scaledWidth = event.getResolution().getScaledWidth();
+        int scaledHeight = event.getResolution().getScaledHeight();
+
         switch (event.getType())
         {
             case ARMOR:
-                int scaledWidth = event.getResolution().getScaledWidth();
-                int scaledHeight = event.getResolution().getScaledHeight();
-                armorBarRenderer.renderArmorBar(scaledWidth, scaledHeight);
-
-                /* Don't render the vanilla armor bar */
-                event.setCanceled(true);
+                if (!ModConfig.disableArmorBar)
+                {
+                    armorBarRenderer.renderArmorBar(scaledWidth, scaledHeight);
+                    /* Don't render the vanilla armor bar */
+                    event.setCanceled(true);
+                }
                 break;
 
             default:

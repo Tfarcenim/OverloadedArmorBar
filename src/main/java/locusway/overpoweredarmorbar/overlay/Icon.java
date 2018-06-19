@@ -3,9 +3,9 @@ package locusway.overpoweredarmorbar.overlay;
 /*
     Class wraps the information required to draw an individual armor icon
  */
-public class ArmorIcon
+public class Icon
 {
-    public Type armorIconType;
+    public Type iconType;
 
     /*
         Type = FULL, Type = NONE:
@@ -14,19 +14,19 @@ public class ArmorIcon
             The color of the left hand side of the icon
 
      */
-    public ArmorIconColor primaryArmorIconColor;
+    public IconColor primaryIconColor;
     /*
         Type = HALF:
             The color of the right hand side of the icon
      */
-    public ArmorIconColor secondaryArmorIconColor;
+    public IconColor secondaryIconColor;
 
 
-    public ArmorIcon()
+    public Icon()
     {
-        armorIconType = Type.NONE;
-        primaryArmorIconColor = new ArmorIconColor();
-        secondaryArmorIconColor = new ArmorIconColor();
+        iconType = Type.NONE;
+        primaryIconColor = new IconColor();
+        secondaryIconColor = new IconColor();
     }
 
     /*

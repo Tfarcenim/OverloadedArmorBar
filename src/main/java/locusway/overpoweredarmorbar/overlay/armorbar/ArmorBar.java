@@ -1,13 +1,14 @@
-package locusway.overpoweredarmorbar.overlay;
+package locusway.overpoweredarmorbar.overlay.armorbar;
 
 import locusway.overpoweredarmorbar.ModConfig;
+import locusway.overpoweredarmorbar.overlay.Icon;
 
 /*
     Class manages the calculations required to determine the correct color(s) to use
  */
 public class ArmorBar
 {
-    private static void setArmorIconColor(ArmorIcon icon, String[] colors, int scale, int armorValue)
+    private static void setArmorIconColor(Icon icon, String[] colors, int scale, int armorValue)
     {
         int currentScale = scale;
         int previousScale = scale - 1;
@@ -27,26 +28,26 @@ public class ArmorBar
         if (armorValue >= 1)
         {
             //Should be current tier color
-            icon.primaryArmorIconColor.setColorFromHex(colors[currentScale]);
+            icon.primaryIconColor.setColorFromHex(colors[currentScale]);
         }
 
         //Covers 1 (HALF) - Secondary Color
         if (armorValue == 1)
         {
             //Should be previous tier color
-            icon.secondaryArmorIconColor.setColorFromHex(colors[previousScale]);
+            icon.secondaryIconColor.setColorFromHex(colors[previousScale]);
         }
 
         if (armorValue == 0)
         {
             //Should be previous tier color
-            icon.primaryArmorIconColor.setColorFromHex(colors[previousScale]);
+            icon.primaryIconColor.setColorFromHex(colors[previousScale]);
         }
     }
 
-    public static ArmorIcon[] calculateArmorIcons(int playerArmorValue)
+    public static Icon[] calculateArmorIcons(int playerArmorValue)
     {
-        ArmorIcon[] armorIcons = new ArmorIcon[10];
+        Icon[] icons = new Icon[10];
 
         //Calculate which color scale to use
         int scale = playerArmorValue / 20;
@@ -64,25 +65,25 @@ public class ArmorBar
 
         for (int i = 0; i < 10; i++)
         {
-            armorIcons[i] = new ArmorIcon();
-            setArmorIconColor(armorIcons[i], ModConfig.colorValues, scale, counter);
+            icons[i] = new Icon();
+            setArmorIconColor(icons[i], ModConfig.armorColorValues, scale, counter);
             if (counter >= 2)
             {
                 //We have at least a full icon to show
-                armorIcons[i].armorIconType = ArmorIcon.Type.FULL;
+                icons[i].iconType = Icon.Type.FULL;
                 counter -= 2;
             } else if (counter == 1)
             {
                 //We have a half icon to show
-                armorIcons[i].armorIconType = ArmorIcon.Type.HALF;
+                icons[i].iconType = Icon.Type.HALF;
                 counter -= 1;
             } else
             {
                 //Empty icon
-                armorIcons[i].armorIconType = ArmorIcon.Type.NONE;
+                icons[i].iconType = Icon.Type.NONE;
             }
         }
 
-        return armorIcons;
+        return icons;
     }
 }
