@@ -1,7 +1,6 @@
 package locusway.overpoweredarmorbar.overlay;
 
 import locusway.overpoweredarmorbar.ModConfig;
-import locusway.overpoweredarmorbar.overlay.armorbar.ArmorBarRenderer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -10,12 +9,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public class OverlayEventHandler
 {
-    public OverlayEventHandler(ArmorBarRenderer armorBarRenderer)
+    public OverlayEventHandler(ArmorBarRenderer armorBarRenderer, HealthBarRenderer healthBarRenderer)
     {
         this.armorBarRenderer = armorBarRenderer;
+        this.healthBarRenderer = healthBarRenderer;
     }
 
     private ArmorBarRenderer armorBarRenderer;
+    private HealthBarRenderer healthBarRenderer;
 
     @SubscribeEvent(receiveCanceled = true)
     public void onRenderGameOverlayEventPre(RenderGameOverlayEvent.Pre event)
@@ -29,6 +30,15 @@ public class OverlayEventHandler
                 if (!ModConfig.disableArmorBar)
                 {
                     armorBarRenderer.renderArmorBar(scaledWidth, scaledHeight);
+
+                    /* Don't render the vanilla armor bar */
+                    event.setCanceled(true);
+                }
+                break;
+            case HEALTH:
+                if (!ModConfig.disableHealthBar)
+                {
+                    healthBarRenderer.renderHealthBar(scaledWidth, scaledHeight);
                     /* Don't render the vanilla armor bar */
                     event.setCanceled(true);
                 }

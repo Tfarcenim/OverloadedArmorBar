@@ -14,7 +14,7 @@ public class OverpoweredArmorBar
 
     public static final String MODID = "overpoweredarmorbar";
     public static final String MODNAME = "Overpowered Armor Bar";
-    public static final String MODVERSION = "0.4.0";
+    public static final String MODVERSION = "0.4.1";
 
     @SidedProxy(clientSide = "locusway.overpoweredarmorbar.proxy.ClientProxy", serverSide = "locusway.overpoweredarmorbar.proxy.ServerProxy")
     public static CommonProxy proxy;
@@ -28,6 +28,19 @@ public class OverpoweredArmorBar
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
+
+        if(ModConfig.armorColorValues.length == 0)
+        {
+            logger.error("Config error! No armor colors specified in config");
+			logger.error("Armor bar will not display correctly.");
+        }
+
+        if(ModConfig.healthColorValues.length == 0)
+        {
+            logger.error("Config error! No health colors specified in config");
+			logger.error("Health bar will not display correctly.");
+        }
+
         proxy.preInit(event);
     }
 

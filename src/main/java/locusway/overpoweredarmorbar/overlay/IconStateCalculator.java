@@ -1,21 +1,29 @@
-package locusway.overpoweredarmorbar.overlay.armorbar;
-
-import locusway.overpoweredarmorbar.ModConfig;
-import locusway.overpoweredarmorbar.overlay.Icon;
+package locusway.overpoweredarmorbar.overlay;
 
 /*
     Class manages the calculations required to determine the correct color(s) to use
  */
-public class ArmorBar
+public class IconStateCalculator
 {
-    private static void setArmorIconColor(Icon icon, String[] colors, int scale, int armorValue)
+    private static void setIconColor(Icon icon, String[] colors, int scale, int value)
     {
         int currentScale = scale;
         int previousScale = scale - 1;
 
+        //Ensure we always have a color on the list
+        if(colors.length == 0)
+        {
+            colors = new String[] {"#FFFFFF"};
+        }
+
+        //Force last color if we have run out of colors on the list
         if (currentScale > colors.length - 1)
         {
             currentScale = colors.length - 1;
+        }
+        if(previousScale > colors.length - 1)
+        {
+            previousScale = colors.length - 1;
         }
 
         //Previous scale is -1 between 0 and 20 points of armor, so reset to 0 for sane value
@@ -25,27 +33,27 @@ public class ArmorBar
         }
 
         //Covers 2 (FULL) and 1 (HALF) - Primary Color
-        if (armorValue >= 1)
+        if (value >= 1)
         {
             //Should be current tier color
             icon.primaryIconColor.setColorFromHex(colors[currentScale]);
         }
 
         //Covers 1 (HALF) - Secondary Color
-        if (armorValue == 1)
+        if (value == 1)
         {
             //Should be previous tier color
             icon.secondaryIconColor.setColorFromHex(colors[previousScale]);
         }
 
-        if (armorValue == 0)
+        if (value == 0)
         {
             //Should be previous tier color
             icon.primaryIconColor.setColorFromHex(colors[previousScale]);
         }
     }
 
-    public static Icon[] calculateArmorIcons(int playerArmorValue)
+    public static Icon[] calculateIcons(int playerArmorValue, String[] colors)
     {
         Icon[] icons = new Icon[10];
 
@@ -66,7 +74,7 @@ public class ArmorBar
         for (int i = 0; i < 10; i++)
         {
             icons[i] = new Icon();
-            setArmorIconColor(icons[i], ModConfig.armorColorValues, scale, counter);
+            setIconColor(icons[i], colors, scale, counter);
             if (counter >= 2)
             {
                 //We have at least a full icon to show
@@ -79,8 +87,16 @@ public class ArmorBar
                 counter -= 1;
             } else
             {
-                //Empty icon
-                icons[i].iconType = Icon.Type.NONE;
+                if(scale > 0)
+                {
+                    //If scale is greater than 1 we have wrapped so we should use a full heart
+                    icons[i].iconType = Icon.Type.FULL;
+                }
+                else
+                {
+                    //Empty icon
+                    icons[i].iconType = Icon.Type.NONE;
+                }
             }
         }
 

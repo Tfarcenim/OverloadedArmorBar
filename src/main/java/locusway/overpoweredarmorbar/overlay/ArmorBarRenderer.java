@@ -1,21 +1,15 @@
-package locusway.overpoweredarmorbar.overlay.armorbar;
+package locusway.overpoweredarmorbar.overlay;
 
 import locusway.overpoweredarmorbar.ModConfig;
-import locusway.overpoweredarmorbar.overlay.Icon;
-import locusway.overpoweredarmorbar.overlay.IconColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ISpecialArmor;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Collection;
 
 /*
     Class handles the drawing of the armor bar
@@ -30,7 +24,7 @@ public class ArmorBarRenderer extends Gui
 	private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
 
 	private Minecraft mc;
-	private ArmorIcon[] armorIcons;
+	private Icon[] armorIcons;
 
 	public ArmorBarRenderer(Minecraft mc)
 	{
@@ -59,11 +53,18 @@ public class ArmorBarRenderer extends Gui
 		int xStart = screenWidth / 2 - 91;
 		int yStart = screenHeight - 39;
 
-		IAttributeInstance playerHealthAttribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-		float playerHealth = (float) playerHealthAttribute.getAttributeValue();
+		//Assume player has half a heart of health for later calculations
+		float playerHealth = 1;
+
+		//If the health bar is disabled, calculate the armor bar offset.
+		//Mods health bar will wrap so requires no additional space
+		if(ModConfig.disableHealthBar)
+		{
+			IAttributeInstance playerHealthAttribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			playerHealth = (float) playerHealthAttribute.getAttributeValue();
+		}
 
 		int absorptionAmount = MathHelper.ceil(player.getAbsorptionAmount());
-
 		int numberOfHealthBars = MathHelper.ceil((playerHealth + (float) absorptionAmount) / 2.0F / 10.0F);
 		int i2 = Math.max(10 - (numberOfHealthBars - 2), 3);
 		int yPosition = yStart - (numberOfHealthBars - 1) * i2 - 10;
@@ -72,7 +73,7 @@ public class ArmorBarRenderer extends Gui
 		if (currentArmorValue != previousArmorValue)
 		{
 			//Calculate here
-			armorIcons = ArmorBar.calculateArmorIcons(currentArmorValue);
+			armorIcons = IconStateCalculator.calculateIcons(currentArmorValue, ModConfig.armorColorValues);
 
 			//Save value for next cycle
 			previousArmorValue = currentArmorValue;
@@ -83,31 +84,30 @@ public class ArmorBarRenderer extends Gui
 		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 
 		int armorIconCounter = 0;
-		for (ArmorIcon icon : armorIcons)
+		for (Icon icon : armorIcons)
 		{
 			int xPosition = xStart + armorIconCounter * 8;
-			switch (icon.armorIconType)
+			switch (icon.iconType)
 			{
 				case NONE:
-					ArmorIconColor color = icon.primaryArmorIconColor;
+					IconColor color = icon.primaryIconColor;
 					GL11.glColor4f(color.Red, color.Green, color.Blue, color.Alpha);
-					if (currentArmorValue > 20)
+
+					//True if the player wants to see the armor bar when they are wearing no armor
+					boolean showEmptyArmorBar = (ModConfig.alwaysShowArmorBar && currentArmorValue == 0);
+
+					//True if the player wants to see empty armor icons and they have armor on
+					boolean showEmptyArmorIcons = (ModConfig.showEmptyArmorIcons && currentArmorValue > 0);
+					if (showEmptyArmorIcons || showEmptyArmorBar)
 					{
-						//Draw the full icon as we have wrapped
-						drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+						//Draw the empty armor icon
+						drawTexturedModalRect(xPosition, yPosition, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
 					}
-					else
-					{
-						if (ModConfig.showEmptyArmorIcons)
-						{
-							//Draw the empty armor icon
-							drawTexturedModalRect(xPosition, yPosition, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
-						}
-					}
+
 					break;
 				case HALF:
-					ArmorIconColor firstHalfColor = icon.primaryArmorIconColor;
-					ArmorIconColor secondHalfColor = icon.secondaryArmorIconColor;
+					IconColor firstHalfColor = icon.primaryIconColor;
+					IconColor secondHalfColor = icon.secondaryIconColor;
 
 					GL11.glColor4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
 					drawTexturedModalRect(xPosition, yPosition, 25, 9, 5, ARMOR_ICON_SIZE);
@@ -125,7 +125,7 @@ public class ArmorBarRenderer extends Gui
 					}
 					break;
 				case FULL:
-					ArmorIconColor fullColor = icon.primaryArmorIconColor;
+					IconColor fullColor = icon.primaryIconColor;
 					GL11.glColor4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
 					drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
 					break;
