@@ -3,7 +3,10 @@ package locusway.overpoweredarmorbar.overlay;
 import locusway.overpoweredarmorbar.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraftforge.common.ISpecialArmor;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
@@ -30,9 +33,28 @@ public class ArmorBarRenderer extends Gui
         this.mc = mc;
     }
 
+    private int calculateArmorValue()
+    {
+        int currentArmorValue = 0;
+        for (ItemStack itemStack: mc.player.getArmorInventoryList())
+        {
+            if(itemStack.getItem() instanceof ISpecialArmor)
+            {
+                ISpecialArmor specialArmor = (ISpecialArmor)itemStack.getItem();
+                currentArmorValue += specialArmor.getArmorDisplay(mc.player, itemStack, 0);
+            }
+            if (itemStack.getItem() instanceof ItemArmor)
+            {
+                ItemArmor itemArmor = (ItemArmor) itemStack.getItem();
+                currentArmorValue += itemArmor.damageReduceAmount;
+            }
+        }
+        return currentArmorValue;
+    }
+
     public void renderArmorBar(int screenWidth, int screenHeight)
     {
-        int currentArmorValue = mc.player.getTotalArmorValue();
+        int currentArmorValue = calculateArmorValue();
 
         int armorBarPotionEffectOffset = 0;
         Collection<PotionEffect> currentEffects = mc.player.getActivePotionEffects();
