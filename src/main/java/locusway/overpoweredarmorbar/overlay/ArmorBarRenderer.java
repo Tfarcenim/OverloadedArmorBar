@@ -37,18 +37,14 @@ public class ArmorBarRenderer extends Gui
 
 	private int calculateArmorValue()
 	{
-		int currentArmorValue = 0;
+		int currentArmorValue = mc.player.getTotalArmorValue();
+
 		for (ItemStack itemStack : mc.player.getArmorInventoryList())
 		{
 			if (itemStack.getItem() instanceof ISpecialArmor)
 			{
 				ISpecialArmor specialArmor = (ISpecialArmor) itemStack.getItem();
 				currentArmorValue += specialArmor.getArmorDisplay(mc.player, itemStack, 0);
-			}
-			if (itemStack.getItem() instanceof ItemArmor)
-			{
-				ItemArmor itemArmor = (ItemArmor) itemStack.getItem();
-				currentArmorValue += itemArmor.damageReduceAmount;
 			}
 		}
 		return currentArmorValue;
