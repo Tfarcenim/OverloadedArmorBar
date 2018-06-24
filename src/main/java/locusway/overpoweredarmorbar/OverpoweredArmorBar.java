@@ -14,7 +14,7 @@ public class OverpoweredArmorBar
 
     public static final String MODID = "overpoweredarmorbar";
     public static final String MODNAME = "Overpowered Armor Bar";
-    public static final String MODVERSION = "0.2.2";
+    public static final String MODVERSION = "0.3.0";
 
     @SidedProxy(clientSide = "locusway.overpoweredarmorbar.proxy.ClientProxy", serverSide = "locusway.overpoweredarmorbar.proxy.ServerProxy")
     public static CommonProxy proxy;

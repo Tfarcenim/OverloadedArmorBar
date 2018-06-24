@@ -3,9 +3,13 @@ package locusway.overpoweredarmorbar.overlay;
 import locusway.overpoweredarmorbar.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ISpecialArmor;
 import org.lwjgl.opengl.GL11;
 
@@ -16,146 +20,131 @@ import java.util.Collection;
  */
 public class ArmorBarRenderer extends Gui
 {
-    private final static int UNKNOWN_ARMOR_VALUE = -1;
-    private int previousArmorValue = UNKNOWN_ARMOR_VALUE;
+	private final static int UNKNOWN_ARMOR_VALUE = -1;
+	private int previousArmorValue = UNKNOWN_ARMOR_VALUE;
 
-    private final static int BAR_HEIGHT = 9;
-    private final static int ARMOR_ICON_SIZE = 9;
-    private final static int ARMOR_FIRST_HALF_ICON_SIZE = 5;
-    private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
-    private final static int BAR_SPACING_ABOVE_EXP_BAR = 2 + BAR_HEIGHT;  // pixels between the Armor bar and the XP bar
+	private final static int ARMOR_ICON_SIZE = 9;
+	private final static int ARMOR_FIRST_HALF_ICON_SIZE = 5;
+	private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
 
-    private Minecraft mc;
-    private ArmorIcon[] armorIcons;
+	private Minecraft mc;
+	private ArmorIcon[] armorIcons;
 
-    public ArmorBarRenderer(Minecraft mc)
-    {
-        this.mc = mc;
-    }
+	public ArmorBarRenderer(Minecraft mc)
+	{
+		this.mc = mc;
+	}
 
-    private int calculateArmorValue()
-    {
-        int currentArmorValue = 0;
-        for (ItemStack itemStack: mc.player.getArmorInventoryList())
-        {
-            if(itemStack.getItem() instanceof ISpecialArmor)
-            {
-                ISpecialArmor specialArmor = (ISpecialArmor)itemStack.getItem();
-                currentArmorValue += specialArmor.getArmorDisplay(mc.player, itemStack, 0);
-            }
-            if (itemStack.getItem() instanceof ItemArmor)
-            {
-                ItemArmor itemArmor = (ItemArmor) itemStack.getItem();
-                currentArmorValue += itemArmor.damageReduceAmount;
-            }
-        }
-        return currentArmorValue;
-    }
+	private int calculateArmorValue()
+	{
+		int currentArmorValue = 0;
+		for (ItemStack itemStack : mc.player.getArmorInventoryList())
+		{
+			if (itemStack.getItem() instanceof ISpecialArmor)
+			{
+				ISpecialArmor specialArmor = (ISpecialArmor) itemStack.getItem();
+				currentArmorValue += specialArmor.getArmorDisplay(mc.player, itemStack, 0);
+			}
+			if (itemStack.getItem() instanceof ItemArmor)
+			{
+				ItemArmor itemArmor = (ItemArmor) itemStack.getItem();
+				currentArmorValue += itemArmor.damageReduceAmount;
+			}
+		}
+		return currentArmorValue;
+	}
 
-    public void renderArmorBar(int screenWidth, int screenHeight)
-    {
-        int currentArmorValue = calculateArmorValue();
+	public void renderArmorBar(int screenWidth, int screenHeight)
+	{
+		EntityPlayer player = mc.player;
+		int currentArmorValue = calculateArmorValue();
+		int xStart = screenWidth / 2 - 91;
+		int yStart = screenHeight - 39;
 
-        int armorBarPotionEffectOffset = 0;
-        Collection<PotionEffect> currentEffects = mc.player.getActivePotionEffects();
-        for (PotionEffect potionEffect: currentEffects)
-        {
-            if(potionEffect.getPotion().getName().equals("effect.absorption"))
-            {
-                armorBarPotionEffectOffset = BAR_HEIGHT + 1;
-            }
-        }
+		IAttributeInstance playerHealthAttribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+		float playerHealth = (float) playerHealthAttribute.getAttributeValue();
 
-        //Hide armor bar if player is not wearing armor unless they have config requesting it
-        if (currentArmorValue == 0 && !ModConfig.alwaysShowArmorBar)
-        {
-            return;
-        }
+		int absorptionAmount = MathHelper.ceil(player.getAbsorptionAmount());
 
-        //Save some CPU cycles by only recalculating armor when it changes
-        if (currentArmorValue != previousArmorValue)
-        {
-            //Calculate here
-            armorIcons = ArmorBar.calculateArmorIcons(currentArmorValue);
+		int numberOfHealthBars = MathHelper.ceil((playerHealth + (float) absorptionAmount) / 2.0F / 10.0F);
+		int i2 = Math.max(10 - (numberOfHealthBars - 2), 3);
+		int yPosition = yStart - (numberOfHealthBars - 1) * i2 - 10;
 
-            //Save value for next cycle
-            previousArmorValue = currentArmorValue;
-        }
+		//Save some CPU cycles by only recalculating armor when it changes
+		if (currentArmorValue != previousArmorValue)
+		{
+			//Calculate here
+			armorIcons = ArmorBar.calculateArmorIcons(currentArmorValue);
 
-        // we will draw the status bar just above the hotbar.
-        //  obtained by inspecting the vanilla hotbar rendering code
-        final int vanillaExpLeftX = screenWidth / 2 - 91; // leftmost edge of the experience bar
-        final int vanillaExpTopY = screenHeight - 32 + 3;  // top of the experience bar
+			//Save value for next cycle
+			previousArmorValue = currentArmorValue;
+		}
 
-        //Make sure we don't leak opengl state
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
+		//Push to avoid lasting changes
+		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 
-        /* Shift our rendering origin to just above the experience bar
-         * The top left corner of the screen is x=0, y=0
-         */
-        GL11.glTranslatef(vanillaExpLeftX, vanillaExpTopY - BAR_SPACING_ABOVE_EXP_BAR - BAR_HEIGHT - armorBarPotionEffectOffset , 0);
+		int armorIconCounter = 0;
+		for (ArmorIcon icon : armorIcons)
+		{
+			int xPosition = xStart + armorIconCounter * 8;
+			switch (icon.armorIconType)
+			{
+				case NONE:
+					ArmorIconColor color = icon.primaryArmorIconColor;
+					GL11.glColor4f(color.Red, color.Green, color.Blue, color.Alpha);
+					if (currentArmorValue > 20)
+					{
+						//Draw the full icon as we have wrapped
+						drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+					}
+					else
+					{
+						if (ModConfig.showEmptyArmorIcons)
+						{
+							//Draw the empty armor icon
+							drawTexturedModalRect(xPosition, yPosition, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+						}
+					}
+					break;
+				case HALF:
+					ArmorIconColor firstHalfColor = icon.primaryArmorIconColor;
+					ArmorIconColor secondHalfColor = icon.secondaryArmorIconColor;
 
-        int positionCounter = 0;
-        for (ArmorIcon icon : armorIcons)
-        {
-            switch (icon.armorIconType)
-            {
-                case NONE:
-                    ArmorIconColor color = icon.primaryArmorIconColor;
-                    GL11.glColor4f(color.Red, color.Green, color.Blue, color.Alpha);
-                    if (currentArmorValue > 20)
-                    {
-                        //Draw the full icon as we have wrapped
-                        drawTexturedModalRect(positionCounter, 0, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
-                    }
-                    else
-                    {
-                        if(ModConfig.showEmptyArmorIcons)
-                        {
-                            //Draw the empty armor icon
-                            drawTexturedModalRect(positionCounter, 0, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
-                        }
-                    }
-                    break;
-                case HALF:
-                    ArmorIconColor firstHalfColor = icon.primaryArmorIconColor;
-                    ArmorIconColor secondHalfColor = icon.secondaryArmorIconColor;
+					GL11.glColor4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
+					drawTexturedModalRect(xPosition, yPosition, 25, 9, 5, ARMOR_ICON_SIZE);
 
-                    GL11.glColor4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
-                    drawTexturedModalRect(positionCounter, 0, 25, 9, 5, ARMOR_ICON_SIZE);
+					GL11.glColor4f(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
+					if (currentArmorValue > 20)
+					{
+						//Draw the second half as full as we have wrapped
+						drawTexturedModalRect(xPosition + 5, yPosition, 34 + 5, 9, ARMOR_FIRST_HALF_ICON_SIZE, ARMOR_ICON_SIZE);
+					}
+					else
+					{
+						//Draw the second half as empty
+						drawTexturedModalRect(xPosition + 5, yPosition, 25 + 5, 9, ARMOR_SECOND_HALF_ICON_SIZE, ARMOR_ICON_SIZE);
+					}
+					break;
+				case FULL:
+					ArmorIconColor fullColor = icon.primaryArmorIconColor;
+					GL11.glColor4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
+					drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+					break;
+				default:
+					break;
+			}
+			armorIconCounter++;
+		}
 
-                    GL11.glColor4f(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
-                    if (currentArmorValue > 20)
-                    {
-                        //Draw the second half as full as we have wrapped
-                        drawTexturedModalRect(positionCounter + 5, 0, 34 + 5, 9, ARMOR_FIRST_HALF_ICON_SIZE, ARMOR_ICON_SIZE);
-                    }
-                    else
-                    {
-                        //Draw the second half as empty
-                        drawTexturedModalRect(positionCounter + 5, 0, 25 + 5, 9, ARMOR_SECOND_HALF_ICON_SIZE, ARMOR_ICON_SIZE);
-                    }
-                    break;
-                case FULL:
-                    ArmorIconColor fullColor = icon.primaryArmorIconColor;
-                    GL11.glColor4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
-                    drawTexturedModalRect(positionCounter, 0, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
-                    break;
-                default:
-                    break;
-            }
-            positionCounter += 8;
-        }
+		//Revert our state back
+		GL11.glPopMatrix();
+		GL11.glPopAttrib();
+	}
 
-        //Revert our state back
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
-    }
-
-    public void forceUpdate()
-    {
-        //Setting to unknown value will cause a refresh next render
-        previousArmorValue = UNKNOWN_ARMOR_VALUE;
-    }
+	public void forceUpdate()
+	{
+		//Setting to unknown value will cause a refresh next render
+		previousArmorValue = UNKNOWN_ARMOR_VALUE;
+	}
 }
