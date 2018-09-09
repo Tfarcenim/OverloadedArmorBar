@@ -12,9 +12,14 @@ public class ArmorBar
         int currentScale = scale;
         int previousScale = scale - 1;
 
+        //Force last color if we have run out of colors on the list
         if (currentScale > colors.length - 1)
         {
             currentScale = colors.length - 1;
+        }
+        if (previousScale > colors.length - 1)
+        {
+            previousScale = colors.length - 1;
         }
 
         //Previous scale is -1 between 0 and 20 points of armor, so reset to 0 for sane value
