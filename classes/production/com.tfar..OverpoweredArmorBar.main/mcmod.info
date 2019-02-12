@@ -1,7 +1,7 @@
 [
 {
   "modid": "overpoweredarmorbar",
-  "name": "Overloaded Armor Bar",
+  "name": "Overpowered Armor Bar",
   "description": "Allow armor bar to wrap when wearing better than diamond, plus other tweaks",
   "version": "${version}",
   "mcversion": "${mcversion}",

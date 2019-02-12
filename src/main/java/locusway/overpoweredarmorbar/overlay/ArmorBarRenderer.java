@@ -1,19 +1,16 @@
 package locusway.overpoweredarmorbar.overlay;
 
 import locusway.overpoweredarmorbar.ModConfig;
+import locusway.overpoweredarmorbar.OverpoweredArmorBar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ISpecialArmor;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Collection;
 
 /*
     Class handles the drawing of the armor bar
@@ -59,6 +56,11 @@ public class ArmorBarRenderer extends Gui
 
 		IAttributeInstance playerHealthAttribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 		float playerHealth = (float) playerHealthAttribute.getAttributeValue();
+
+		if (OverpoweredArmorBar.healthColored && playerHealth > 20) {
+			//Fake that the player health only goes up to 20 so that it does not make the bar float above the health bar
+			playerHealth = 20;
+		}
 
 		int absorptionAmount = MathHelper.ceil(player.getAbsorptionAmount());
 
