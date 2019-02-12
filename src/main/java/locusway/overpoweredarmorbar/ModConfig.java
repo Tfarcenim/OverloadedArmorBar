@@ -20,4 +20,10 @@ public class ModConfig
 
     @Config.Name("Show empty armor icons?")
     public static boolean showEmptyArmorIcons = false;
+
+    @Config.Name("Mods that recolor the healthbar, add mods here if needed")
+    public static String[] modids = new String[]{
+            "bhc",
+            "scalinghealth"};
+
 }
