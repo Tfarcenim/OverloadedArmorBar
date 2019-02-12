@@ -23,7 +23,7 @@ public class ModConfig
 
     @Config.Name("Mods that recolor the healthbar, add mods here if needed")
     public static String[] modids = new String[]{
-            "bhc",
+            "mantle",
             "scalinghealth"};
 
 }
