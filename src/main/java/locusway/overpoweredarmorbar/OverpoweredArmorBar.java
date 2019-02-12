@@ -34,10 +34,11 @@ public class OverpoweredArmorBar {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        //Checks the config to see if a mod is loaded that colors the health. First one is Baubley Heart Canisters' modid
+        //Checks the config to see if a mod is loaded that colors the health. Default is Mantle and Scaling Health
         for (String mods: modids) {
             if (Loader.isModLoaded(mods)){
                 healthColored = true;
+                break;
         }
     }
 }
