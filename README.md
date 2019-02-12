@@ -8,5 +8,5 @@ Other optional features:
 * Show the armor bar when the player is not wearing any armor
 * Hide empty armor icons
 
-### Known Issues
-* This mod is not compatible with mods that add additional health bars.
+### Note
+* This mod is compatible with mods that add additional health bars.
