@@ -1,5 +1,6 @@
 # Directories
 /.gradle
+/classes
 
 # Build Files
 /build
@@ -11,3 +12,4 @@
 /*.iml
 /*.ipr
 /.idea
+
