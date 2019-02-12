@@ -3,7 +3,7 @@ The vanilla armor bar doesn't accurately show "better than diamond" level armor,
 
 This mod allows armor values over 20 to be displayed as different colored (configurable) icons depending on how many times you fill the bar.
 
-However, without AttributeFix, the armor display will cap out at 30 Armor, or 1.5x diamond armor due to vanilla caps.
+However, without AttributeFix, the armor display will cap out at 30 Armor, or 1.5x diamond armor due to the vanilla cap.
 
 Other optional features:
 
