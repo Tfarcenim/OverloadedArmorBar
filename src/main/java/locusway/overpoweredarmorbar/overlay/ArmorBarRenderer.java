@@ -12,6 +12,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ISpecialArmor;
 import org.lwjgl.opengl.GL11;
 
+import static locusway.overpoweredarmorbar.ModConfig.alwaysShowArmorBar;
+
 /*
     Class handles the drawing of the armor bar
  */
@@ -98,7 +100,7 @@ public class ArmorBarRenderer extends Gui
 					}
 					else
 					{
-						if (ModConfig.showEmptyArmorIcons)
+						if (ModConfig.showEmptyArmorIcons &&( alwaysShowArmorBar || currentArmorValue>0))
 						{
 							//Draw the empty armor icon
 							drawTexturedModalRect(xPosition, yPosition, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
