@@ -4,13 +4,13 @@ import locusway.overpoweredarmorbar.ModConfig;
 import locusway.overpoweredarmorbar.OverpoweredArmorBar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ISpecialArmor;
-import org.lwjgl.opengl.GL11;
 
 import static locusway.overpoweredarmorbar.ModConfig.alwaysShowArmorBar;
 
@@ -51,6 +51,7 @@ public class ArmorBarRenderer extends Gui
 
 	public void renderArmorBar(int screenWidth, int screenHeight)
 	{
+		drawRect(1,1,500,500,28);
 		EntityPlayer player = mc.player;
 		int currentArmorValue = calculateArmorValue();
 		int xStart = screenWidth / 2 - 91;
@@ -59,14 +60,15 @@ public class ArmorBarRenderer extends Gui
 		IAttributeInstance playerHealthAttribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 		float playerHealth = (float) playerHealthAttribute.getAttributeValue();
 
-		if (OverpoweredArmorBar.healthColored && playerHealth > 20) {
-			//Fake that the player health only goes up to 20 so that it does not make the bar float above the health bar
-			playerHealth = 20;
-		}
+		//Fake that the player health only goes up to 20 so that it does not make the bar float above the health bar
+		if (OverpoweredArmorBar.healthColored && playerHealth > 20) playerHealth = 20;
 
 		int absorptionAmount = MathHelper.ceil(player.getAbsorptionAmount());
 
-		int numberOfHealthBars = MathHelper.ceil((playerHealth + (float) absorptionAmount) / 2.0F / 10.0F);
+		//Clamp the absorption value to 20 so that it doesn't make the bar float above the health bar
+		if (OverpoweredArmorBar.healthColored && absorptionAmount >20) absorptionAmount=20;
+
+		int numberOfHealthBars = MathHelper.ceil((playerHealth + (float) absorptionAmount) / 20.0F);
 		int i2 = Math.max(10 - (numberOfHealthBars - 2), 3);
 		int yPosition = yStart - (numberOfHealthBars - 1) * i2 - 10;
 
@@ -81,8 +83,8 @@ public class ArmorBarRenderer extends Gui
 		}
 
 		//Push to avoid lasting changes
-		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+		GlStateManager.pushMatrix();
+		//GlStateManager.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 
 		int armorIconCounter = 0;
 		for (ArmorIcon icon : armorIcons)
@@ -92,7 +94,7 @@ public class ArmorBarRenderer extends Gui
 			{
 				case NONE:
 					ArmorIconColor color = icon.primaryArmorIconColor;
-					GL11.glColor4f(color.Red, color.Green, color.Blue, color.Alpha);
+					GlStateManager.color(color.Red, color.Green, color.Blue, color.Alpha);
 					if (currentArmorValue > 20)
 					{
 						//Draw the full icon as we have wrapped
@@ -111,10 +113,10 @@ public class ArmorBarRenderer extends Gui
 					ArmorIconColor firstHalfColor = icon.primaryArmorIconColor;
 					ArmorIconColor secondHalfColor = icon.secondaryArmorIconColor;
 
-					GL11.glColor4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
+					GlStateManager.color(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
 					drawTexturedModalRect(xPosition, yPosition, 25, 9, 5, ARMOR_ICON_SIZE);
 
-					GL11.glColor4f(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
+					GlStateManager.color(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
 					if (currentArmorValue > 20)
 					{
 						//Draw the second half as full as we have wrapped
@@ -128,7 +130,7 @@ public class ArmorBarRenderer extends Gui
 					break;
 				case FULL:
 					ArmorIconColor fullColor = icon.primaryArmorIconColor;
-					GL11.glColor4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
+					GlStateManager.color(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
 					drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
 					break;
 				default:
@@ -138,8 +140,8 @@ public class ArmorBarRenderer extends Gui
 		}
 
 		//Revert our state back
-		GL11.glPopMatrix();
-		GL11.glPopAttrib();
+		GlStateManager.popMatrix();
+		//GL11.glPopAttrib();
 	}
 
 	public void forceUpdate()
