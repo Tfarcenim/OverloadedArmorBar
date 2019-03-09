@@ -2,29 +2,28 @@ package locusway.overpoweredarmorbar.proxy;
 
 import locusway.overpoweredarmorbar.EventConfigChanged;
 import locusway.overpoweredarmorbar.OverpoweredArmorBar;
-import locusway.overpoweredarmorbar.overlay.OverlayEventHandler;
 import locusway.overpoweredarmorbar.overlay.ArmorBarRenderer;
+import locusway.overpoweredarmorbar.overlay.OverlayEventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+import static net.minecraftforge.api.distmarker.Dist.CLIENT;
+
+@Mod.EventBusSubscriber(CLIENT)
 public class ClientProxy extends CommonProxy
 {
-    private static ArmorBarRenderer armorBarRenderer;
+    private ArmorBarRenderer armorBarRenderer;
 
     @Override
-    public void postInit(FMLPostInitializationEvent event)
+    public void postInit(FMLCommonSetupEvent event)
     {
         super.postInit(event);
 
         //Register Armor Renderer for events
-        armorBarRenderer = new ArmorBarRenderer(Minecraft.getMinecraft());
+        armorBarRenderer = new ArmorBarRenderer(Minecraft.getInstance());
         OverlayEventHandler overlay = new OverlayEventHandler(armorBarRenderer);
         MinecraftForge.EVENT_BUS.register(overlay);
 
@@ -33,10 +32,10 @@ public class ClientProxy extends CommonProxy
         MinecraftForge.EVENT_BUS.register(eventConfigChanged);
     }
 
-    @Override
+  @Override
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        ConfigManager.sync(OverpoweredArmorBar.MODID, Config.Type.INSTANCE);
+        new ConfigChangedEvent.OnConfigChangedEvent(OverpoweredArmorBar.MODID,"stuff", false, false);
         armorBarRenderer.forceUpdate();
     }
 }

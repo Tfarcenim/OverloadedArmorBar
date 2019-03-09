@@ -1,6 +1,6 @@
 package locusway.overpoweredarmorbar.overlay;
 
-import locusway.overpoweredarmorbar.ModConfig;
+import locusway.overpoweredarmorbar.Configs;
 
 /*
     Class manages the calculations required to determine the correct color(s) to use
@@ -70,7 +70,7 @@ public class ArmorBar
         for (int i = 0; i < 10; i++)
         {
             armorIcons[i] = new ArmorIcon();
-            setArmorIconColor(armorIcons[i], ModConfig.colorValues, scale, counter);
+            setArmorIconColor(armorIcons[i], Configs.colorValues, scale, counter);
             if (counter >= 2)
             {
                 //We have at least a full icon to show

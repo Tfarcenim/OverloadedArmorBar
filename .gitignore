@@ -1,15 +1,25 @@
-# Directories
-/.gradle
-/classes
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-# Build Files
-/build
-/run
-/out
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
 
-#Intelij
-/*.iws
-/*.iml
-/*.ipr
-/.idea
+# gradle
+build
+.gradle
 
+# other
+eclipse
+run
+
+# Files from Forge MDK
+forge*changelog.txt

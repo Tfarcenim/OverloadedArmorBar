@@ -1,7 +1,7 @@
 package locusway.overpoweredarmorbar;
 
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EventConfigChanged
 {
@@ -10,8 +10,6 @@ public class EventConfigChanged
     {
         //Only process events for this mod
         if (event.getModID().equals(OverpoweredArmorBar.MODID))
-        {
             OverpoweredArmorBar.proxy.onConfigChanged(event);
-        }
     }
 }
