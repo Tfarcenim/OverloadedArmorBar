@@ -5,7 +5,7 @@
   "description": "Allow armor bar to wrap when wearing better than diamond, plus other tweaks",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "https://github.com/Tfarcenim/OverpoweredArmorBar",
+  "url": "https://github.com/Tfarcenim/OverloadedArmorBar",
   "updateUrl": "",
   "authorList": ["LocusWay, Tfarecmin"],
   "credits": "",
