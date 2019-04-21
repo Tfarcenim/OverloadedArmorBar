@@ -12,7 +12,6 @@ public class ArmorIcon
             The color of the icon
         Type = HALF:
             The color of the left hand side of the icon
-
      */
     public ArmorIconColor primaryArmorIconColor;
     /*

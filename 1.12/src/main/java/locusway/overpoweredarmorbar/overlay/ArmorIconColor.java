@@ -12,6 +12,7 @@ public class ArmorIconColor
     public float Blue;
     public float Green;
     public float Alpha;
+    public static final Pattern colorPattern = Pattern.compile("^#[0-9A-Fa-f]{6}$");
 
     public ArmorIconColor()
     {
@@ -25,7 +26,6 @@ public class ArmorIconColor
     public void setColorFromHex(String colorHex)
     {
         //Check the color hex is valid
-        Pattern colorPattern = Pattern.compile("^#[0-9A-Fa-f]{6}$");
         Matcher matcher = colorPattern.matcher(colorHex);
         if (matcher.matches())
         {
@@ -36,7 +36,7 @@ public class ArmorIconColor
         else
         {
             //Set values to black (default minecraft color)
-            Red = Blue = Green = 1.0f;
+            Red = Blue = Green = 0.0f;
         }
     }
 }

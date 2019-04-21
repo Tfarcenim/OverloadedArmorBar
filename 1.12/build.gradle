@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.0.3"
+version = "1.0.4e"
 group = "com.tfar.overloadedarmorbar" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "overloadedarmorbar"
 
@@ -37,6 +37,9 @@ repositories {
         name "Mobius Repo"
         url "http://tehnut.info/maven"
     }
+    maven {
+        url 'https://maven.mcmoddev.com'
+    }
     maven { // JEI
         url "http://dvs1.progwml6.com/files/maven"
     }
@@ -53,8 +56,9 @@ repositories {
     }
 }
 dependencies {
-
+        deobfCompile "com.azanor:Baubles:${baubles_version}"
 }
+
 
 processResources {
     // this will ensure that this task is redone when the versions change.
