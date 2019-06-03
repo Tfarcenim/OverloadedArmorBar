@@ -42,7 +42,7 @@ public class LavaCharmRenderer {
         int left = 0;
         double absorb = player.getAbsorptionAmount();
         double health = player.getMaxHealth();
-        int numberOfBars = (ModConfig.offset) ? (int)(Math.ceil(health / 20) + Math.ceil(absorb) / 20) : 1 + ((absorb > 0) ? 1 : 0);
+        int numberOfBars = ModConfig.offset ? (int)(Math.ceil(health / 20) + Math.ceil(absorb) / 20) : 1 + (absorb > 0 ? 1 : 0);
         int top = height - 50 - 10 * numberOfBars;
         GlStateManager.enableBlend();
         GlStateManager.color(1, 1, 1, 1);
