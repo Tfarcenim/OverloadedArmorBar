@@ -19,22 +19,12 @@ public class Configs {
         CLIENT = specPair.getLeft();
     }
 
-    public static String[] colorValues = new String[]{
-            "#FFFFFF",
-            "#FF5500",
-            "#FFC747",
-            "#27FFE3",
-            "#00FF00",
-            "#7F00FF"};
-
-    public static boolean alwaysShowArmorBar = false;
-    public static boolean showEmptyArmorIcons = false;
-
     public static class ClientConfig {
 
-        public ForgeConfigSpec.BooleanValue alwaysShowArmorBar;
-        public ForgeConfigSpec.BooleanValue showEmptyArmorIcons;
-        public ForgeConfigSpec.ConfigValue<List<? extends String>> colorValues;
+        public static ForgeConfigSpec.BooleanValue alwaysShowArmorBar;
+        public static ForgeConfigSpec.BooleanValue showEmptyArmorIcons;
+        public static ForgeConfigSpec.BooleanValue offset;
+        public static ForgeConfigSpec.ConfigValue<List<? extends String>> colorValues;
 
         ClientConfig(ForgeConfigSpec.Builder builder) {
             builder.push("general");
@@ -50,7 +40,21 @@ public class Configs {
                     .comment("Show empty armor icons?")
                     .translation("text.overpoweredarmorbar.config.showemptyarmoricons")
                     .define("Show empty icons", false);
+            offset = builder
+                    .comment("offset armor?")
+                    .translation("text.overpoweredarmorbar.config.offset")
+                    .define("offset", false);
             builder.pop();
         }
+    }
+    public static boolean alwaysShowArmorBar = false;
+    public static boolean showEmptyArmorIcons = false;
+    public static List<? extends String> colorValues;
+    public static boolean offset = false;
+    public static void bake(){
+        alwaysShowArmorBar = ClientConfig.alwaysShowArmorBar.get();
+        showEmptyArmorIcons = ClientConfig.showEmptyArmorIcons.get();
+        colorValues = ClientConfig.colorValues.get();
+        offset = ClientConfig.offset.get();
     }
 }

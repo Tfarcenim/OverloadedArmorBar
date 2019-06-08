@@ -2,24 +2,26 @@ package locusway.overpoweredarmorbar.overlay;
 
 import locusway.overpoweredarmorbar.Configs;
 
+import java.util.List;
+
 /*
     Class manages the calculations required to determine the correct color(s) to use
  */
 public class ArmorBar
 {
-    private static void setArmorIconColor(ArmorIcon icon, String[] colors, int scale, int armorValue)
+    private static void setArmorIconColor(ArmorIcon icon, List<? extends String> colors, int scale, int armorValue)
     {
         int currentScale = scale;
         int previousScale = scale - 1;
 
         //Force last color if we have run out of colors on the list
-        if (currentScale > colors.length - 1)
+        if (currentScale > colors.size() - 1)
         {
-            currentScale = colors.length - 1;
+            currentScale = colors.size() - 1;
         }
-        if (previousScale > colors.length - 1)
+        if (previousScale > colors.size() - 1)
         {
-            previousScale = colors.length - 1;
+            previousScale = colors.size() - 1;
         }
 
         //Previous scale is -1 between 0 and 20 points of armor, so reset to 0 for sane value
@@ -32,20 +34,20 @@ public class ArmorBar
         if (armorValue >= 1)
         {
             //Should be current tier color
-            icon.primaryArmorIconColor.setColorFromHex(colors[currentScale]);
+            icon.primaryArmorIconColor.setColorFromHex(colors.get(currentScale));
         }
 
         //Covers 1 (HALF) - Secondary Color
         if (armorValue == 1)
         {
             //Should be previous tier color
-            icon.secondaryArmorIconColor.setColorFromHex(colors[previousScale]);
+            icon.secondaryArmorIconColor.setColorFromHex(colors.get(previousScale));
         }
 
         if (armorValue == 0)
         {
             //Should be previous tier color
-            icon.primaryArmorIconColor.setColorFromHex(colors[previousScale]);
+            icon.primaryArmorIconColor.setColorFromHex(colors.get(previousScale));
         }
     }
 
