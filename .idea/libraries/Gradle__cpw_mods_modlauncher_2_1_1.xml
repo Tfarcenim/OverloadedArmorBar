@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: cpw.mods:modlauncher:2.1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/cpw.mods/modlauncher/2.1.1/9f5cf14b7ae4b97fb2891841335691e75cd5927b/modlauncher-2.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/cpw.mods/modlauncher/2.1.1/ac1b9b8d6d4a40d3d35b1d0242274cd49d79cb7d/modlauncher-2.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

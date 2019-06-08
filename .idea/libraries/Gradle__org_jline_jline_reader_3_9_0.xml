@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jline:jline-reader:3.9.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jline/jline-reader/3.9.0/6868d0c3fcf0548d4671ad6b3436c41835a4f37b/jline-reader-3.9.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jline/jline-reader/3.9.0/29a4590ca91a0e9abd2b8a880dcd5a568be0e961/jline-reader-3.9.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

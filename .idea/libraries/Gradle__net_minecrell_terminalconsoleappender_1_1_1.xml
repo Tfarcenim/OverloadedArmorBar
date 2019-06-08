@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: net.minecrell:terminalconsoleappender:1.1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.minecrell/terminalconsoleappender/1.1.1/d7e48a3c5f778bb8b41d178a52b4411dff418a0c/terminalconsoleappender-1.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.minecrell/terminalconsoleappender/1.1.1/484d70369930358f7bb36c061fa37cafc578ac11/terminalconsoleappender-1.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: net.minecraftforge:eventbus:service:0.9.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.minecraftforge/eventbus/0.9.3/a2ad95acb01a06ee6d263d3fe86750463ae5ec5/eventbus-0.9.3-service.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.minecraftforge/eventbus/0.9.3/24d9ed5583a66575c0414d3051fcdd200b8e1eb7/eventbus-0.9.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
