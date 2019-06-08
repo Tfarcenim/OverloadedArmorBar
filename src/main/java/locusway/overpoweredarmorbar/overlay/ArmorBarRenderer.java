@@ -1,18 +1,15 @@
 package locusway.overpoweredarmorbar.overlay;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import locusway.overpoweredarmorbar.Configs;
 import locusway.overpoweredarmorbar.OverpoweredArmorBar;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.util.Arrays;
@@ -58,7 +55,7 @@ public class ArmorBarRenderer extends Gui
 
 	public void renderArmorBar(int screenWidth, int screenHeight)
 	{
-		EntityPlayer player = mc.player;
+		PlayerEntity player = mc.player;
 		int currentArmorValue = calculateArmorValue();
 		int xStart = screenWidth / 2 - 91;
 		int yStart = screenHeight - 39;
