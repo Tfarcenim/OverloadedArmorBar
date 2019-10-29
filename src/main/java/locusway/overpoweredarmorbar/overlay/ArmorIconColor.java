@@ -12,6 +12,7 @@ public class ArmorIconColor
     public float Blue;
     public float Green;
     public float Alpha;
+    public static final Pattern pattern = Pattern.compile("^#[0-9A-Fa-f]{6}$");
 
     public ArmorIconColor()
     {
@@ -25,8 +26,7 @@ public class ArmorIconColor
     public void setColorFromHex(String colorHex)
     {
         //Check the color hex is valid
-        Pattern colorPattern = Pattern.compile("^#[0-9A-Fa-f]{6}$");
-        Matcher matcher = colorPattern.matcher(colorHex);
+        Matcher matcher = pattern.matcher(colorHex);
         if (matcher.matches())
         {
             Red = Integer.valueOf(colorHex.substring(1, 3), 16).floatValue() / 255;

@@ -1,17 +1,16 @@
 package locusway.overpoweredarmorbar.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import locusway.overpoweredarmorbar.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static locusway.overpoweredarmorbar.Configs.*;
-import static locusway.overpoweredarmorbar.proxy.ClientProxy.*;
-
 /*
     Class which handles the render event and hides the vanilla armor bar
  */
@@ -65,16 +64,15 @@ public class OverlayEventHandler {
         int xStart = screenWidth / 2 - 91;
         int yStart = screenHeight - 39;
 
-        IAttributeInstance playerHealthAttribute = player.getAttribute(SharedMonsterAttributes.MAX_HEALTH);
-        float playerHealth = (float) playerHealthAttribute.getAttribute().getDefaultValue();
+        double playerHealth = player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getValue();
 
         //Fake that the player health only goes up to 20 so that it does not make the bar float above the health bar
-        if (!offset && playerHealth > 20) playerHealth = 20;
+        if (!Configs.ClientConfig.offset.get() && playerHealth > 20) playerHealth = 20;
 
         float absorptionAmount = MathHelper.ceil(player.getAbsorptionAmount());
 
         //Clamp the absorption value to 20 so that it doesn't make the bar float above the health bar
-        if (!offset && absorptionAmount > 20) absorptionAmount = 20;
+        if (!Configs.ClientConfig.offset.get() && absorptionAmount > 20) absorptionAmount = 20;
 
         int numberOfHealthBars = (int) Math.ceil(playerHealth / 20) + (int) Math.ceil(absorptionAmount / 20);
         int i2 = Math.max(10 - (numberOfHealthBars - 2), 3);
@@ -105,7 +103,7 @@ public class OverlayEventHandler {
                         //Draw the full icon as we have wrapped
                         drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                     } else {
-                        if (showEmptyArmorIcons && (alwaysShowArmorBar || currentArmorValue > 0)) {
+                        if (ClientConfig.showEmptyArmorIcons.get() && (ClientConfig.alwaysShowArmorBar.get() || currentArmorValue > 0)) {
                             //Draw the empty armor icon
                             drawTexturedModalRect(xPosition, yPosition, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                         }
@@ -142,10 +140,5 @@ public class OverlayEventHandler {
         GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.popMatrix();
         //GL11.glPopAttrib();
-    }
-
-    public void forceUpdate() {
-        //Setting to unknown value will cause a refresh next render
-        handler.previousArmorValue = UNKNOWN_ARMOR_VALUE;
     }
 }

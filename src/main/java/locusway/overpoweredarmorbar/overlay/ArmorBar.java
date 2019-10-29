@@ -72,7 +72,7 @@ public class ArmorBar
         for (int i = 0; i < 10; i++)
         {
             armorIcons[i] = new ArmorIcon();
-            setArmorIconColor(armorIcons[i], Configs.colorValues, scale, counter);
+            setArmorIconColor(armorIcons[i], Configs.ClientConfig.colorValues.get(), scale, counter);
             if (counter >= 2)
             {
                 //We have at least a full icon to show

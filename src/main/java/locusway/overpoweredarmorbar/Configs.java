@@ -47,14 +47,4 @@ public class Configs {
             builder.pop();
         }
     }
-    public static boolean alwaysShowArmorBar = false;
-    public static boolean showEmptyArmorIcons = false;
-    public static List<? extends String> colorValues;
-    public static boolean offset = false;
-    public static void bake(){
-        alwaysShowArmorBar = ClientConfig.alwaysShowArmorBar.get();
-        showEmptyArmorIcons = ClientConfig.showEmptyArmorIcons.get();
-        colorValues = ClientConfig.colorValues.get();
-        offset = ClientConfig.offset.get();
-    }
 }
