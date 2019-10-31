@@ -25,18 +25,13 @@ public class ArmorIconColor
      */
     public void setColorFromHex(String colorHex)
     {
-        //Check the color hex is valid
+        //Check the color hex is valid otherwise default to white
         Matcher matcher = pattern.matcher(colorHex);
         if (matcher.matches())
         {
             Red = Integer.valueOf(colorHex.substring(1, 3), 16).floatValue() / 255;
             Green = Integer.valueOf(colorHex.substring(3, 5), 16).floatValue() / 255;
             Blue = Integer.valueOf(colorHex.substring(5, 7), 16).floatValue() / 255;
-        }
-        else
-        {
-            //Set values to black (default minecraft color)
-            Red = Blue = Green = 1.0f;
         }
     }
 }

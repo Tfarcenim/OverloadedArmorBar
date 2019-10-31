@@ -29,5 +29,5 @@ displayName="Overloaded Armor Bar" #mandatory
 authors="Tfarecnim, LocusWay" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Enchanced armor bar rendering for armor above diamond
+Enhanced armor bar rendering for armor above diamond
 '''

@@ -7,6 +7,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.ForgeIngameGui;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -43,9 +44,8 @@ public class OverlayEventHandler {
         renderArmorBar(scaledWidth,scaledHeight);
         /* Don't render the vanilla armor bar */
         event.setCanceled(true);
-
     }
-
+    //account for ISpecialArmor, seems to be missing in 1.13+ forge
     private int calculateArmorValue() {
         int currentArmorValue = mc.player.getTotalArmorValue();
 
@@ -59,24 +59,9 @@ public class OverlayEventHandler {
     }
 
     public void renderArmorBar(int screenWidth, int screenHeight) {
-        PlayerEntity player = mc.player;
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
-        int yStart = screenHeight - 39;
-
-        double playerHealth = player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getValue();
-
-        //Fake that the player health only goes up to 20 so that it does not make the bar float above the health bar
-        if (!Configs.ClientConfig.offset.get() && playerHealth > 20) playerHealth = 20;
-
-        float absorptionAmount = MathHelper.ceil(player.getAbsorptionAmount());
-
-        //Clamp the absorption value to 20 so that it doesn't make the bar float above the health bar
-        if (!Configs.ClientConfig.offset.get() && absorptionAmount > 20) absorptionAmount = 20;
-
-        int numberOfHealthBars = (int) Math.ceil(playerHealth / 20) + (int) Math.ceil(absorptionAmount / 20);
-        int i2 = Math.max(10 - (numberOfHealthBars - 2), 3);
-        int yPosition = yStart - (numberOfHealthBars - 1) * i2 - 10;
+        int yPosition = screenHeight - ForgeIngameGui.left_height;
 
         //Save some CPU cycles by only recalculating armor when it changes
         if (currentArmorValue != previousArmorValue) {
@@ -90,7 +75,6 @@ public class OverlayEventHandler {
         //Push to avoid lasting changes
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
-        //GlStateManager.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 
         int armorIconCounter = 0;
         for (ArmorIcon icon : armorIcons) {
@@ -139,6 +123,5 @@ public class OverlayEventHandler {
         //Revert our state back
         GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.popMatrix();
-        //GL11.glPopAttrib();
     }
 }
