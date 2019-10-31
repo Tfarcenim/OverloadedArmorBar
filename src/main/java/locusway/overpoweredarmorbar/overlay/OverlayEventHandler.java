@@ -1,17 +1,12 @@
 package locusway.overpoweredarmorbar.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import locusway.overpoweredarmorbar.Configs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.SharedMonsterAttributes;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.ForgeIngameGui;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import static locusway.overpoweredarmorbar.Configs.*;
+import static locusway.overpoweredarmorbar.Configs.ClientConfig;
 /*
     Class which handles the render event and hides the vanilla armor bar
  */
