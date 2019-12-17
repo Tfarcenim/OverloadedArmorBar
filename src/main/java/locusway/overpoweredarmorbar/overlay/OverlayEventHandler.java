@@ -2,8 +2,8 @@ package locusway.overpoweredarmorbar.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.ForgeIngameGui;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static locusway.overpoweredarmorbar.Configs.ClientConfig;
@@ -34,8 +34,8 @@ public class OverlayEventHandler {
     public void onRenderGameOverlayEventPre(RenderGameOverlayEvent event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR)
             return;
-        int scaledWidth = mc.mainWindow.getScaledWidth();
-        int scaledHeight = mc.mainWindow.getScaledHeight();
+        int scaledWidth = mc.func_228018_at_().getScaledWidth();
+        int scaledHeight = mc.func_228018_at_().getScaledHeight();
         renderArmorBar(scaledWidth,scaledHeight);
         /* Don't render the vanilla armor bar */
         event.setCanceled(true);
@@ -68,8 +68,8 @@ public class OverlayEventHandler {
         }
 
         //Push to avoid lasting changes
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
+        GlStateManager.func_227626_N_();
+        //GlStateManager.enableBlend();
 
         int armorIconCounter = 0;
         for (ArmorIcon icon : armorIcons) {
@@ -77,7 +77,7 @@ public class OverlayEventHandler {
             switch (icon.armorIconType) {
                 case NONE:
                     ArmorIconColor color = icon.primaryArmorIconColor;
-                    GlStateManager.color4f(color.Red, color.Green, color.Blue, color.Alpha);
+                    color4f(color.Red, color.Green, color.Blue, color.Alpha);
                     if (currentArmorValue > 20) {
                         //Draw the full icon as we have wrapped
                         drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
@@ -92,10 +92,10 @@ public class OverlayEventHandler {
                     ArmorIconColor firstHalfColor = icon.primaryArmorIconColor;
                     ArmorIconColor secondHalfColor = icon.secondaryArmorIconColor;
 
-                    GlStateManager.color4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
+                    color4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
                     drawTexturedModalRect(xPosition, yPosition, 25, 9, 5, ARMOR_ICON_SIZE);
 
-                    GlStateManager.color4f(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
+                    color4f(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
                     if (currentArmorValue > 20) {
                         //Draw the second half as full as we have wrapped
                         drawTexturedModalRect(xPosition + 5, yPosition, 39, 9, ARMOR_SECOND_HALF_ICON_SIZE, ARMOR_ICON_SIZE);
@@ -106,7 +106,7 @@ public class OverlayEventHandler {
                     break;
                 case FULL:
                     ArmorIconColor fullColor = icon.primaryArmorIconColor;
-                    GlStateManager.color4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
+                    color4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
                     drawTexturedModalRect(xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                     break;
                 default:
@@ -116,7 +116,11 @@ public class OverlayEventHandler {
         }
 
         //Revert our state back
-        GlStateManager.color4f(1, 1, 1, 1);
-        GlStateManager.popMatrix();
+        color4f(1, 1, 1, 1);
+        GlStateManager.func_227627_O_();
+    }
+
+    private static void color4f(float r, float g, float b, float a){
+        GlStateManager.func_227702_d_(r,g, b, a);
     }
 }
