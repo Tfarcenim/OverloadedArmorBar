@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Configs {
 
-
     public static final ClientConfig CLIENT;
     public static final ForgeConfigSpec CLIENT_SPEC;
 
