@@ -1,4 +1,8 @@
-package locusway.overpoweredarmorbar.overlay;
+package tfar.overpoweredarmorbar.overlay;
+
+import net.minecraft.block.Blocks;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +17,8 @@ public class ArmorIconColor
     public float Green;
     public float Alpha;
     public static final Pattern pattern = Pattern.compile("^#[0-9A-Fa-f]{6}$");
+
+
 
     public ArmorIconColor()
     {

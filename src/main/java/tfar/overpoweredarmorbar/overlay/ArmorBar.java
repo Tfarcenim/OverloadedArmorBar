@@ -1,6 +1,7 @@
-package locusway.overpoweredarmorbar.overlay;
+package tfar.overpoweredarmorbar.overlay;
 
-import locusway.overpoweredarmorbar.Configs;
+
+import tfar.overpoweredarmorbar.Configs;
 
 import java.util.List;
 

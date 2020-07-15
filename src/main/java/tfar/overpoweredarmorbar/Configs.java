@@ -1,4 +1,4 @@
-package locusway.overpoweredarmorbar;
+package tfar.overpoweredarmorbar;
 
 
 import com.google.common.collect.Lists;
@@ -19,7 +19,6 @@ public class Configs {
     }
 
     public static class ClientConfig {
-
         public static ForgeConfigSpec.BooleanValue alwaysShowArmorBar;
         public static ForgeConfigSpec.BooleanValue showEmptyArmorIcons;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> colorValues;

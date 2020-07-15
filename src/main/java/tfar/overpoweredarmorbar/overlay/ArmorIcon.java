@@ -1,4 +1,4 @@
-package locusway.overpoweredarmorbar.overlay;
+package tfar.overpoweredarmorbar.overlay;
 
 /*
     Class wraps the information required to draw an individual armor icon
