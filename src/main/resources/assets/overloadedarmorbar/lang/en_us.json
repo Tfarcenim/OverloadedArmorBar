@@ -1,0 +1,8 @@
+{
+"overloadedarmorbar.config.colors": "Colors to use",
+"overloadedarmorbar.config.tt.colors": "List of colors, in the form of #xxxxxx hex values, space separated",
+"overloadedarmorbar.config.showempty": "Even empty slots",
+"overloadedarmorbar.config.tt.showempty": "Show unused armor slots in black, instead of not at all",
+"overloadedarmorbar.config.alwaysshow": "Always show",
+"overloadedarmorbar.config.tt.alwaysshow": "Show the armor bar even if the player isn't wearing armor"
+}

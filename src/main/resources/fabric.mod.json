@@ -1,0 +1,37 @@
+{
+    "schemaVersion": 1,
+    "id": "overloadedarmorbar",
+    "version": "${version}",
+    "environment": "*",
+    "entrypoints": {
+        "client": [ "tfar.overpoweredarmorbar.OverloadedArmorBar" ],
+        "modmenu": [ "tfar.overpoweredarmorbar.MMConfigurationHandler" ]
+    },
+    "custom": {
+        "modmenu:clientsideOnly": true,
+        "XXXXmodupdater": {
+            "comment": "rename this to modupdater and adjust the URL if you want this to work",
+            "strategy": "json",
+            "url": "https://raw.githubusercontent.com/gbl/ModVersionInfo/master/OverloadedArmorBar.json"
+        }
+    },
+    "mixins": [
+      	"mixins.overloadedarmorbar.json"
+    ],
+    "depends": {
+      "fabric": "*"
+    },
+    "recommends": {
+        "modmenu" : "*",
+        "modupdater": ">=1.1.7"        
+    },
+    "name": "Overloaded Armor Bar",
+    "description": "The vanilla armor bar doesn't accurately show \"better than diamond\" level armor, as it simply maxes out when its full. This mod allows armor values over 20 to be displayed as different colored (configurable) icons depending on how many times you fill the bar.",
+    "icon": "icon.png",
+    "authors": [ "tfarecnim", "Giselbaer" ],
+    "contact": {
+        "homepage": "https://www.curseforge.com/minecraft/mc-mods/overloaded-armor-bar",
+        "sources": "https://github.com/Tfarcenim/OverloadedArmorBar",
+        "issues": "https://github.com/Tfarcenim/OverloadedArmorBar/issues"
+    }
+}

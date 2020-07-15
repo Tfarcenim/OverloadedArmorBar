@@ -1,9 +1,8 @@
 package tfar.overpoweredarmorbar.overlay;
 
 
-import tfar.overpoweredarmorbar.Configs;
-
 import java.util.List;
+import tfar.overpoweredarmorbar.ConfigurationHandler;
 
 /*
     Class manages the calculations required to determine the correct color(s) to use
@@ -73,7 +72,7 @@ public class ArmorBar
         for (int i = 0; i < 10; i++)
         {
             armorIcons[i] = new ArmorIcon();
-            setArmorIconColor(armorIcons[i], Configs.ClientConfig.colorValues.get(), scale, counter);
+            setArmorIconColor(armorIcons[i], ConfigurationHandler.colorValues(), scale, counter);
             if (counter >= 2)
             {
                 //We have at least a full icon to show

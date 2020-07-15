@@ -1,20 +1,20 @@
 package tfar.overpoweredarmorbar.overlay;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import tfar.overpoweredarmorbar.Configs;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
+import tfar.overpoweredarmorbar.ConfigurationHandler;
+import tfar.overpoweredarmorbar.RenderGameOverlayEvent;
 
 /*
     Class which handles the render event and hides the vanilla armor bar
  */
 public class OverlayEventHandler {
     public static void drawTexturedModalRect(MatrixStack stack,int x, int y, int textureX, int textureY, int width, int height) {
-        Minecraft.getInstance().ingameGUI.blit(stack,x, y, textureX, textureY, width, height);
+        MinecraftClient.getInstance().inGameHud.drawTexture(stack,x, y, textureX, textureY, width, height);
     }
 
     public OverlayEventHandler() {
@@ -29,36 +29,36 @@ public class OverlayEventHandler {
     //private final static int ARMOR_FIRST_HALF_ICON_SIZE = 5;
     private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
 
-    private Minecraft mc = Minecraft.getInstance();
+    private MinecraftClient mc = MinecraftClient.getInstance();
     private ArmorIcon[] armorIcons;
 
-    @SubscribeEvent(receiveCanceled = true)
+    // @SubscribeEvent(receiveCanceled = true)
+    
     public void onRenderGameOverlayEventPre(RenderGameOverlayEvent event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR)
             return;
-        int scaledWidth = mc.getMainWindow().getScaledWidth();
-        int scaledHeight = mc.getMainWindow().getScaledHeight();
+        int scaledWidth = mc.getWindow().getScaledWidth();
+        int scaledHeight = mc.getWindow().getScaledHeight();
         renderArmorBar(event.getMatrixStack(),scaledWidth,scaledHeight);
         /* Don't render the vanilla armor bar */
         event.setCanceled(true);
     }
     //account for ISpecialArmor, seems to be missing in 1.13+ forge
     private int calculateArmorValue() {
-        int currentArmorValue = mc.player.getTotalArmorValue();
+        int currentArmorValue = 0;
 
-    /*    for (ItemStack itemStack : mc.player.getArmorInventoryList()) {
-            if (itemStack.getItem() instanceof ISpecialArmor) {
-                ISpecialArmor specialArmor = (ISpecialArmor) itemStack.getItem();
-                currentArmorValue += specialArmor.getArmorDisplay(mc.player, itemStack, 0);
+        for (ItemStack stack: mc.player.getArmorItems()) {
+            if (stack.getItem() instanceof ArmorItem) {
+                currentArmorValue += ((ArmorItem)stack.getItem()).getProtection();
             }
-        }
-      */  return currentArmorValue;
+        };
+        return currentArmorValue;
     }
 
     public void renderArmorBar(MatrixStack stack,int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
-        int yPosition = screenHeight - ForgeIngameGui.left_height;
+        int yPosition = screenHeight - 49; // ForgeIngameGui.left_height - this doesn't exist on Fabric as Fabric doesn't replace the rendering code;
 
         //Save some CPU cycles by only recalculating armor when it changes
         if (currentArmorValue != previousArmorValue) {
@@ -84,7 +84,7 @@ public class OverlayEventHandler {
                         //Draw the full icon as we have wrapped
                         drawTexturedModalRect(stack,xPosition, yPosition, 34, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                     } else {
-                        if (Configs.ClientConfig.showEmptyArmorIcons.get() && (Configs.ClientConfig.alwaysShowArmorBar.get() || currentArmorValue > 0)) {
+                        if (ConfigurationHandler.showEmptyArmorIcons() && (ConfigurationHandler.alwaysShowArmorBar() || currentArmorValue > 0)) {
                             //Draw the empty armor icon
                             drawTexturedModalRect(stack,xPosition, yPosition, 16, 9, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                         }
