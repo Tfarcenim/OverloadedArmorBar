@@ -2,19 +2,20 @@ package tfar.overpoweredarmorbar;
 
 // This is a fake class that looks like the corresponding Forge class,
 
-import net.minecraft.client.util.math.MatrixStack;
-
 // to keep the changes to OverlayEventHandler as small as possible.
+
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public class RenderGameOverlayEvent {
     
-    public static enum ElementType { ARMOR; }
-    private MatrixStack stack;
+    public enum ElementType { ARMOR}
+    private final PoseStack stack;
 
-    public RenderGameOverlayEvent(MatrixStack stack) {
+    public RenderGameOverlayEvent(PoseStack stack) {
         this.stack = stack;
     }
-    public void setCanceled(boolean b) { };
-    public MatrixStack getMatrixStack() { return stack; }
+    public void setCanceled(boolean b) { }
+
+    public PoseStack getMatrixStack() { return stack; }
     public ElementType getType() { return ElementType.ARMOR; }
 }

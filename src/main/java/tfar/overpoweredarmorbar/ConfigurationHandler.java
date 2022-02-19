@@ -3,6 +3,7 @@ package tfar.overpoweredarmorbar;
 import de.guntram.mcmod.fabrictools.ConfigChangedEvent;
 import de.guntram.mcmod.fabrictools.Configuration;
 import de.guntram.mcmod.fabrictools.ModConfigurationHandler;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;

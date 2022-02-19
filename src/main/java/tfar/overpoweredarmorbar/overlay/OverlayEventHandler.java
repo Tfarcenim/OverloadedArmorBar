@@ -1,11 +1,11 @@
 package tfar.overpoweredarmorbar.overlay;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import tfar.overpoweredarmorbar.ConfigurationHandler;
 import tfar.overpoweredarmorbar.RenderGameOverlayEvent;
 
@@ -13,8 +13,8 @@ import tfar.overpoweredarmorbar.RenderGameOverlayEvent;
     Class which handles the render event and hides the vanilla armor bar
  */
 public class OverlayEventHandler {
-    public static void drawTexturedModalRect(MatrixStack stack,int x, int y, int textureX, int textureY, int width, int height) {
-        MinecraftClient.getInstance().inGameHud.drawTexture(stack,x, y, textureX, textureY, width, height);
+    public static void drawTexturedModalRect(PoseStack stack, int x, int y, int textureX, int textureY, int width, int height) {
+        Minecraft.getInstance().gui.blit(stack,x, y, textureX, textureY, width, height);
     }
 
     public OverlayEventHandler() {
@@ -29,7 +29,7 @@ public class OverlayEventHandler {
     //private final static int ARMOR_FIRST_HALF_ICON_SIZE = 5;
     private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
 
-    private MinecraftClient mc = MinecraftClient.getInstance();
+    private Minecraft mc = Minecraft.getInstance();
     private ArmorIcon[] armorIcons;
 
     // @SubscribeEvent(receiveCanceled = true)
@@ -37,25 +37,18 @@ public class OverlayEventHandler {
     public void onRenderGameOverlayEventPre(RenderGameOverlayEvent event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR)
             return;
-        int scaledWidth = mc.getWindow().getScaledWidth();
-        int scaledHeight = mc.getWindow().getScaledHeight();
+        int scaledWidth = mc.getWindow().getGuiScaledWidth();
+        int scaledHeight = mc.getWindow().getGuiScaledHeight();
         renderArmorBar(event.getMatrixStack(),scaledWidth,scaledHeight);
         /* Don't render the vanilla armor bar */
         event.setCanceled(true);
     }
     //account for ISpecialArmor, seems to be missing in 1.13+ forge
     private int calculateArmorValue() {
-        int currentArmorValue = 0;
-
-        for (ItemStack stack: mc.player.getArmorItems()) {
-            if (stack.getItem() instanceof ArmorItem) {
-                currentArmorValue += ((ArmorItem)stack.getItem()).getProtection();
-            }
-        };
-        return currentArmorValue;
+        return (int)mc.player.getAttribute(Attributes.ARMOR).getValue();
     }
 
-    public void renderArmorBar(MatrixStack stack,int screenWidth, int screenHeight) {
+    public void renderArmorBar(PoseStack stack,int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
         int yPosition = screenHeight - 49; // ForgeIngameGui.left_height - this doesn't exist on Fabric as Fabric doesn't replace the rendering code;
@@ -70,7 +63,7 @@ public class OverlayEventHandler {
         }
 
         //Push to avoid lasting changes
-        RenderSystem.pushMatrix();
+       //RenderSystem.pushMatrix();
         //GlStateManager.enableBlend();
 
         int armorIconCounter = 0;
@@ -119,10 +112,10 @@ public class OverlayEventHandler {
 
         //Revert our state back
         color4f(1, 1, 1, 1);
-        GlStateManager.popMatrix();
+        //GlStateManager.popMatrix();
     }
 
-    private static void color4f(float r, float g, float b, float a){
-        RenderSystem.color4f(r,g, b, a);
+    private static void color4f(float r, float g, float b, float a) {
+        RenderSystem.setShaderColor(r,g, b, a);
     }
 }

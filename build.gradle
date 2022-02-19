@@ -1,60 +1,83 @@
 plugins {
-	id 'fabric-loom' version '0.2.7-SNAPSHOT'
+	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'maven-publish'
 }
 
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
 repositories {
-	maven {
-		url = "https://maven.fabricmc.net/"
-	}
+	// Add repositories to retrieve artifacts from in here.
+	// You should only use this when depending on other mods because
+	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
+	// for more information about repositories.
 	maven {
 		url = "https://minecraft.guntram.de/maven/"
 	}
+	maven {
+		url = "https://maven.terraformersmc.com"
+	}
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings(loom.officialMojangMappings())
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-archivesBaseName = "${modid}"
-ext.projectVersion = "1.1"
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-version = "${mod_version}-fabric"
+	modImplementation "com.terraformersmc:modmenu:3.0.1"
 
-minecraft {
-    refmapName = "overloadedarmorbar-refmap.json";
+	modImplementation "de.guntram.mcmod:GBfabrictools:1.2.2+1.16"
+	include    "de.guntram.mcmod:GBfabrictools:1.2.2+1.16"
 }
 
 processResources {
 	inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
 }
 
-dependencies {
-    
-    minecraft  "com.mojang:minecraft:1.16.1"
-    mappings   "net.fabricmc:yarn:1.16.1+build.21:v2"
-    modCompile "net.fabricmc:fabric-loader:0.8.9+build.203"
-    modCompile "net.fabricmc.fabric-api:fabric-api:0.14.1+build.372-1.16"
-    modCompile "io.github.prospector:modmenu:1.10.2+build.1"
-    
-    modCompile "de.guntram.mcmod:GBfabrictools:1.2.2+1.16"
-    include    "de.guntram.mcmod:GBfabrictools:1.2.2+1.16"
+tasks.withType(JavaCompile).configureEach {
+	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+	it.options.release = 17
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
 }
 
 jar {
-	from "LICENSE"
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	repositories {
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
+	}
 }
