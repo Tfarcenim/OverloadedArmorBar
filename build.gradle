@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.7-SNAPSHOT'
+	id 'fabric-loom' version '0.6-SNAPSHOT'
 }
 
 repositories {
@@ -8,6 +8,9 @@ repositories {
 	}
 	maven {
 		url = "https://minecraft.guntram.de/maven/"
+	}
+	maven {
+		url = "https://maven.terraformersmc.com"
 	}
 }
 
@@ -41,7 +44,7 @@ dependencies {
     mappings   "net.fabricmc:yarn:1.16.1+build.21:v2"
     modCompile "net.fabricmc:fabric-loader:0.8.9+build.203"
     modCompile "net.fabricmc.fabric-api:fabric-api:0.14.1+build.372-1.16"
-    modCompile "io.github.prospector:modmenu:1.10.2+build.1"
+    modCompile "com.terraformersmc:modmenu:1.16.22"
     
     modCompile "de.guntram.mcmod:GBfabrictools:1.2.2+1.16"
     include    "de.guntram.mcmod:GBfabrictools:1.2.2+1.16"

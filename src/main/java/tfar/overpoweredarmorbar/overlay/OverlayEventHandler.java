@@ -4,6 +4,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import tfar.overpoweredarmorbar.ConfigurationHandler;
@@ -43,16 +45,9 @@ public class OverlayEventHandler {
         /* Don't render the vanilla armor bar */
         event.setCanceled(true);
     }
-    //account for ISpecialArmor, seems to be missing in 1.13+ forge
+    
     private int calculateArmorValue() {
-        int currentArmorValue = 0;
-
-        for (ItemStack stack: mc.player.getArmorItems()) {
-            if (stack.getItem() instanceof ArmorItem) {
-                currentArmorValue += ((ArmorItem)stack.getItem()).getProtection();
-            }
-        };
-        return currentArmorValue;
+        return (int)mc.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
     }
 
     public void renderArmorBar(MatrixStack stack,int screenWidth, int screenHeight) {

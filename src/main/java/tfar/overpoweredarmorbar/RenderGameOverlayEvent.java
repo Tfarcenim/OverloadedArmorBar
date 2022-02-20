@@ -8,13 +8,14 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class RenderGameOverlayEvent {
     
-    public static enum ElementType { ARMOR; }
-    private MatrixStack stack;
+    public enum ElementType { ARMOR}
+    private final MatrixStack stack;
 
     public RenderGameOverlayEvent(MatrixStack stack) {
         this.stack = stack;
     }
-    public void setCanceled(boolean b) { };
+    public void setCanceled(boolean b) { }
+
     public MatrixStack getMatrixStack() { return stack; }
     public ElementType getType() { return ElementType.ARMOR; }
 }
