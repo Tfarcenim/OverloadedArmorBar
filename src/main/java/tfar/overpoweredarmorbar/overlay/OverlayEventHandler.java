@@ -45,7 +45,7 @@ public class OverlayEventHandler {
         /* Don't render the vanilla armor bar */
         event.setCanceled(true);
     }
-    
+
     private int calculateArmorValue() {
         return (int)mc.player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
     }

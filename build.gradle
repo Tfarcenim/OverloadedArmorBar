@@ -20,7 +20,7 @@ targetCompatibility = 1.8
 archivesBaseName = "${modid}"
 ext.projectVersion = "1.1"
 
-version = "${mod_version}-fabric"
+version = "${mc_version}-${mod_version}"
 
 minecraft {
     refmapName = "overloadedarmorbar-refmap.json";
