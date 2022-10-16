@@ -10,6 +10,7 @@ loaderVersion="[25,)" #mandatory (24 is current forge version)
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/Tfarcenim/OverloadedArmorBar/issues" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
+license="MIT"
 [[mods]] #mandatory
 # The modid of the mod
 modId="overloadedarmorbar" #mandatory
@@ -29,5 +30,5 @@ displayName="Overloaded Armor Bar" #mandatory
 authors="Tfarecnim, LocusWay" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Enhanced armor bar rendering for armor above diamond
+Enhanced armor bar rendering for armor levels above diamond
 '''
