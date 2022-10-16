@@ -4,5 +4,7 @@
 "overloadedarmorbar.config.showempty": "Even empty slots",
 "overloadedarmorbar.config.tt.showempty": "Show unused armor slots in black, instead of not at all",
 "overloadedarmorbar.config.alwaysshow": "Always show",
-"overloadedarmorbar.config.tt.alwaysshow": "Show the armor bar even if the player isn't wearing armor"
+"overloadedarmorbar.config.tt.alwaysshow": "Show the armor bar even if the player isn't wearing armor",
+  "overloadedarmorbar.config.offset": "Offset",
+  "overloadedarmorbar.config.tt.offset": "Offsets armor bar if player has an effect such as absorption or health boost, disable if mods change the health bar from vanilla"
 }

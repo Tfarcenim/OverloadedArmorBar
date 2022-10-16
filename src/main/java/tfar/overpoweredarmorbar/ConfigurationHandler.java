@@ -15,7 +15,7 @@ public class ConfigurationHandler implements ModConfigurationHandler
     private Configuration config;
     private String configFileName;
 
-    private boolean alwaysShowAmorBar, showEmptyArmorIcons;
+    private boolean alwaysShowAmorBar, showEmptyArmorIcons,offset;
     private String colorValues;
 
     public static ConfigurationHandler getInstance() {
@@ -60,6 +60,8 @@ public class ConfigurationHandler implements ModConfigurationHandler
                 Configuration.CATEGORY_CLIENT, false, "overloadedarmorbar.config.tt.alwaysshow");
         showEmptyArmorIcons = config.getBoolean("overloadedarmorbar.config.showempty",
                 Configuration.CATEGORY_CLIENT, false, "overloadedarmorbar.config.tt.showempty");
+        offset = config.getBoolean("overloadedarmorbar.config.offset",
+                Configuration.CATEGORY_CLIENT, true, "overloadedarmorbar.config.tt.offset");
         colorValues = config.getString("overloadedarmorbar.config.colors",
                 Configuration.CATEGORY_CLIENT, "#FFFFFF #FF5500 #FFC747 #27FFE3 #00FF00 #7F00FF", "overloadedarmorbar.config.tt.colors");
         
@@ -77,4 +79,8 @@ public class ConfigurationHandler implements ModConfigurationHandler
     public static List<String> colorValues() { 
         return Arrays.asList(getInstance().colorValues.split(" "));
     };
+
+    public static boolean offset() {
+        return getInstance().offset;
+    }
 }

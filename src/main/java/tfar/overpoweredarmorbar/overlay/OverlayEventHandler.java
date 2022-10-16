@@ -3,11 +3,9 @@ package tfar.overpoweredarmorbar.overlay;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ItemStack;
 import tfar.overpoweredarmorbar.ConfigurationHandler;
-import tfar.overpoweredarmorbar.RenderGameOverlayEvent;
 
 /*
     Class which handles the render event and hides the vanilla armor bar
@@ -24,34 +22,30 @@ public class OverlayEventHandler {
         Class handles the drawing of the armor bar
      */
     private final static int UNKNOWN_ARMOR_VALUE = -1;
-    private int previousArmorValue = UNKNOWN_ARMOR_VALUE;
+    private static int previousArmorValue = UNKNOWN_ARMOR_VALUE;
     private final static int ARMOR_ICON_SIZE = 9;
     //private final static int ARMOR_FIRST_HALF_ICON_SIZE = 5;
     private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
 
-    private Minecraft mc = Minecraft.getInstance();
-    private ArmorIcon[] armorIcons;
+    private static final Minecraft mc = Minecraft.getInstance();
+    private static ArmorIcon[] armorIcons;
 
     // @SubscribeEvent(receiveCanceled = true)
     
-    public void onRenderGameOverlayEventPre(RenderGameOverlayEvent event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR)
-            return;
+    public static void onRenderGameOverlayEventPre(PoseStack event) {
         int scaledWidth = mc.getWindow().getGuiScaledWidth();
         int scaledHeight = mc.getWindow().getGuiScaledHeight();
-        renderArmorBar(event.getMatrixStack(),scaledWidth,scaledHeight);
-        /* Don't render the vanilla armor bar */
-        event.setCanceled(true);
+        renderArmorBar(event,scaledWidth,scaledHeight);
     }
     //account for ISpecialArmor, seems to be missing in 1.13+ forge
-    private int calculateArmorValue() {
+    private static int calculateArmorValue() {
         return (int)mc.player.getAttribute(Attributes.ARMOR).getValue();
     }
 
-    public void renderArmorBar(PoseStack stack,int screenWidth, int screenHeight) {
+    public static void renderArmorBar(PoseStack stack,int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
-        int yPosition = screenHeight - 49; // ForgeIngameGui.left_height - this doesn't exist on Fabric as Fabric doesn't replace the rendering code;
+        int yPosition = getYOffset(screenHeight); // ForgeIngameGui.left_height - this doesn't exist on Fabric as Fabric doesn't replace the rendering code;
 
         //Save some CPU cycles by only recalculating armor when it changes
         if (currentArmorValue != previousArmorValue) {
@@ -61,10 +55,6 @@ public class OverlayEventHandler {
             //Save value for next cycle
             previousArmorValue = currentArmorValue;
         }
-
-        //Push to avoid lasting changes
-       //RenderSystem.pushMatrix();
-        //GlStateManager.enableBlend();
 
         int armorIconCounter = 0;
         for (ArmorIcon icon : armorIcons) {
@@ -110,9 +100,19 @@ public class OverlayEventHandler {
             armorIconCounter++;
         }
 
-        //Revert our state back
         color4f(1, 1, 1, 1);
-        //GlStateManager.popMatrix();
+    }
+
+    private static int getYOffset(int screenH) {
+        int y = screenH - 39;
+
+        double maxHealth = ConfigurationHandler.offset() ? mc.player.getAttributeValue(Attributes.MAX_HEALTH) : 20;
+        int absorption = ConfigurationHandler.offset() ? Mth.ceil(mc.player.getAbsorptionAmount()) : 0;
+        int offsetRows = Mth.ceil((maxHealth + absorption) / 2.0f / 10.0f);
+        int r = Math.max(10 - (offsetRows - 2), 3);
+        int s = y - (offsetRows - 1) * r - 10;
+
+        return s;
     }
 
     private static void color4f(float r, float g, float b, float a) {

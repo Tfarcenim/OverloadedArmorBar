@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tfar.overpoweredarmorbar.OverloadedArmorBar;
-import tfar.overpoweredarmorbar.RenderGameOverlayEvent;
+import tfar.overpoweredarmorbar.overlay.OverlayEventHandler;
 
 @Mixin(Gui.class)
 public class ArmorRenderMixin {
@@ -20,6 +20,6 @@ public class ArmorRenderMixin {
     @Inject(method="renderPlayerHealth", at=@At(value = "INVOKE_STRING", target="Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", args = { "ldc=health" }))
     public void stopSuppressingTextureDraw(PoseStack stack, CallbackInfo ci) {
         OverloadedArmorBar.drawTextureSuppressed = false;
-        OverloadedArmorBar.oeHandler.onRenderGameOverlayEventPre(new RenderGameOverlayEvent(stack));
+        OverlayEventHandler.onRenderGameOverlayEventPre(stack);
     }
 }
