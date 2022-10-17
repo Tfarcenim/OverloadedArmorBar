@@ -1,9 +1,5 @@
 package tfar.overpoweredarmorbar.overlay;
 
-import net.minecraft.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

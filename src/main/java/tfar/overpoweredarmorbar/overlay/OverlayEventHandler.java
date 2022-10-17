@@ -1,20 +1,18 @@
 package tfar.overpoweredarmorbar.overlay;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.client.gui.IIngameOverlay;
 import tfar.overpoweredarmorbar.Configs;
 
 /*
     Class which handles the render event and hides the vanilla armor bar
  */
-public class OverlayEventHandler {
-    public static void drawTexturedModalRect(MatrixStack stack,int x, int y, int textureX, int textureY, int width, int height) {
-        Minecraft.getInstance().ingameGUI.blit(stack,x, y, textureX, textureY, width, height);
+public class OverlayEventHandler implements IIngameOverlay {
+    public static void drawTexturedModalRect(PoseStack stack, int x, int y, int textureX, int textureY, int width, int height) {
+        Minecraft.getInstance().gui.blit(stack,x, y, textureX, textureY, width, height);
     }
 
     public OverlayEventHandler() {
@@ -29,22 +27,17 @@ public class OverlayEventHandler {
     //private final static int ARMOR_FIRST_HALF_ICON_SIZE = 5;
     private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
 
-    private Minecraft mc = Minecraft.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
     private ArmorIcon[] armorIcons;
 
-    @SubscribeEvent(receiveCanceled = true)
-    public void onRenderGameOverlayEventPre(RenderGameOverlayEvent event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR)
-            return;
-        int scaledWidth = mc.getMainWindow().getScaledWidth();
-        int scaledHeight = mc.getMainWindow().getScaledHeight();
-        renderArmorBar(event.getMatrixStack(),scaledWidth,scaledHeight);
-        /* Don't render the vanilla armor bar */
-        event.setCanceled(true);
+
+    public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+        gui.setupOverlayRenderState(true,false);
+        renderArmorBar(gui,poseStack,width,height);
     }
     //account for ISpecialArmor, seems to be missing in 1.13+ forge
     private int calculateArmorValue() {
-        int currentArmorValue = mc.player.getTotalArmorValue();
+        int currentArmorValue = mc.player.getArmorValue();
 
     /*    for (ItemStack itemStack : mc.player.getArmorInventoryList()) {
             if (itemStack.getItem() instanceof ISpecialArmor) {
@@ -55,10 +48,10 @@ public class OverlayEventHandler {
       */  return currentArmorValue;
     }
 
-    public void renderArmorBar(MatrixStack stack,int screenWidth, int screenHeight) {
+    public void renderArmorBar(ForgeIngameGui gui, PoseStack stack, int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
-        int yPosition = screenHeight - ForgeIngameGui.left_height;
+        int yPosition = screenHeight - gui.left_height;
 
         //Save some CPU cycles by only recalculating armor when it changes
         if (currentArmorValue != previousArmorValue) {
@@ -70,7 +63,7 @@ public class OverlayEventHandler {
         }
 
         //Push to avoid lasting changes
-        RenderSystem.pushMatrix();
+      //  RenderSystem.pushMatrix();
         //GlStateManager.enableBlend();
 
         int armorIconCounter = 0;
@@ -119,10 +112,10 @@ public class OverlayEventHandler {
 
         //Revert our state back
         color4f(1, 1, 1, 1);
-        GlStateManager.popMatrix();
+        //GlStateManager.popMatrix();
     }
 
     private static void color4f(float r, float g, float b, float a){
-        RenderSystem.color4f(r,g, b, a);
+        RenderSystem.setShaderColor(r,g, b, a);
     }
 }
