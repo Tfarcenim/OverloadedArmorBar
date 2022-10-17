@@ -3,14 +3,17 @@ package tfar.overpoweredarmorbar.overlay;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.IIngameOverlay;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import tfar.overpoweredarmorbar.Configs;
 
 /*
     Class which handles the render event and hides the vanilla armor bar
  */
-public class OverlayEventHandler implements IIngameOverlay {
+public class OverlayEventHandler implements IGuiOverlay {
     public static void drawTexturedModalRect(PoseStack stack, int x, int y, int textureX, int textureY, int width, int height) {
         Minecraft.getInstance().gui.blit(stack,x, y, textureX, textureY, width, height);
     }
@@ -31,7 +34,7 @@ public class OverlayEventHandler implements IIngameOverlay {
     private ArmorIcon[] armorIcons;
 
 
-    public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+    public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
         gui.setupOverlayRenderState(true,false);
         renderArmorBar(gui,poseStack,width,height);
     }
@@ -48,10 +51,10 @@ public class OverlayEventHandler implements IIngameOverlay {
       */  return currentArmorValue;
     }
 
-    public void renderArmorBar(ForgeIngameGui gui, PoseStack stack, int screenWidth, int screenHeight) {
+    public void renderArmorBar(ForgeGui gui, PoseStack stack, int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
-        int yPosition = screenHeight - gui.left_height;
+        int yPosition = screenHeight - gui.leftHeight;
 
         //Save some CPU cycles by only recalculating armor when it changes
         if (currentArmorValue != previousArmorValue) {
@@ -117,5 +120,11 @@ public class OverlayEventHandler implements IIngameOverlay {
 
     private static void color4f(float r, float g, float b, float a){
         RenderSystem.setShaderColor(r,g, b, a);
+    }
+
+    public static void renderOverlay(RenderGuiOverlayEvent.Pre e) {
+        if (e.getOverlay().id().equals(VanillaGuiOverlay.ARMOR_LEVEL.id())) {
+            e.setCanceled(true);
+        }
     }
 }

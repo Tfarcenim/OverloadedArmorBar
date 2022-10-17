@@ -1,12 +1,12 @@
 package tfar.overpoweredarmorbar;
 
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import tfar.overpoweredarmorbar.overlay.OverlayEventHandler;
@@ -24,11 +24,9 @@ public class OverloadedArmorBar {
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC);
 		}
 	}
-@SuppressWarnings("ConstantConditions")
-	public void setup(final FMLClientSetupEvent event) {
-	OverlayRegistry.OverlayEntry entry = OverlayRegistry.getEntry(ForgeIngameGui.ARMOR_LEVEL_ELEMENT);
+	public void setup(final RegisterGuiOverlaysEvent event) {
 		//Register Armor Renderer for events
-		OverlayRegistry.registerOverlayTop(entry.getDisplayName(),new OverlayEventHandler());
-		OverlayRegistry.enableOverlay(ForgeIngameGui.ARMOR_LEVEL_ELEMENT, false);
+		event.registerAbove(VanillaGuiOverlay.ARMOR_LEVEL.id(),MODID,new OverlayEventHandler());
+		MinecraftForge.EVENT_BUS.addListener(OverlayEventHandler::renderOverlay);
 	}
 }
