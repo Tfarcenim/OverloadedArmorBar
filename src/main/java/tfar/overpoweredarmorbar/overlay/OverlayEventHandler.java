@@ -34,8 +34,10 @@ public class OverlayEventHandler implements IGuiOverlay {
 
 
     public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
-        gui.setupOverlayRenderState(true,false);
-        renderArmorBar(gui,poseStack,width,height);
+        if (!gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements()) {
+            gui.setupOverlayRenderState(true, false);
+            renderArmorBar(gui, poseStack, width, height);
+        }
     }
     //account for ISpecialArmor, seems to be missing in 1.13+ forge
     private int calculateArmorValue() {
