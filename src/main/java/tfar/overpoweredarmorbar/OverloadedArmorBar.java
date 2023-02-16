@@ -31,6 +31,6 @@ public class OverloadedArmorBar {
 	public void setup(final RegisterGuiOverlaysEvent event) {
 		//Register Armor Renderer for events
 		event.registerAbove(VanillaGuiOverlay.ARMOR_LEVEL.id(),MODID,new OverlayEventHandler());
-		MinecraftForge.EVENT_BUS.addListener(OverlayEventHandler::renderOverlay);
+		MinecraftForge.EVENT_BUS.addListener(OverlayEventHandler::disableOverlay);
 	}
 }

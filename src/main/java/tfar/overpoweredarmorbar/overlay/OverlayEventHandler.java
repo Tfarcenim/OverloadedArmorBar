@@ -66,10 +66,6 @@ public class OverlayEventHandler implements IGuiOverlay {
             previousArmorValue = currentArmorValue;
         }
 
-        //Push to avoid lasting changes
-      //  RenderSystem.pushMatrix();
-        //GlStateManager.enableBlend();
-
         int armorIconCounter = 0;
         for (ArmorIcon icon : armorIcons) {
             int xPosition = xStart + armorIconCounter * 8;
@@ -113,17 +109,14 @@ public class OverlayEventHandler implements IGuiOverlay {
             }
             armorIconCounter++;
         }
-
-        //Revert our state back
         color4f(1, 1, 1, 1);
-        //GlStateManager.popMatrix();
     }
 
     private static void color4f(float r, float g, float b, float a){
         RenderSystem.setShaderColor(r,g, b, a);
     }
 
-    public static void renderOverlay(RenderGuiOverlayEvent.Pre e) {
+    public static void disableOverlay(RenderGuiOverlayEvent.Pre e) {
         if (e.getOverlay().id().equals(VanillaGuiOverlay.ARMOR_LEVEL.id())) {
             e.setCanceled(true);
         }
