@@ -10,33 +10,34 @@ import tfar.overpoweredarmorbar.Configs;
 /*
     Class which handles the render event and hides the vanilla armor bar
  */
-public class OverlayEventHandler implements IIngameOverlay {
+public class OverlayEventHandler {
     public static void drawTexturedModalRect(PoseStack stack, int x, int y, int textureX, int textureY, int width, int height) {
         Minecraft.getInstance().gui.blit(stack,x, y, textureX, textureY, width, height);
     }
 
-    public OverlayEventHandler() {
-    }
+    public static final IIngameOverlay overlay = OverlayEventHandler::render;
 
     /*
         Class handles the drawing of the armor bar
      */
     private final static int UNKNOWN_ARMOR_VALUE = -1;
-    private int previousArmorValue = UNKNOWN_ARMOR_VALUE;
+    private static int previousArmorValue = UNKNOWN_ARMOR_VALUE;
     private final static int ARMOR_ICON_SIZE = 9;
     //private final static int ARMOR_FIRST_HALF_ICON_SIZE = 5;
     private final static int ARMOR_SECOND_HALF_ICON_SIZE = 4;
 
     private static final Minecraft mc = Minecraft.getInstance();
-    private ArmorIcon[] armorIcons;
+    private static ArmorIcon[] armorIcons;
 
 
-    public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {
-        gui.setupOverlayRenderState(true,false);
-        renderArmorBar(gui,poseStack,width,height);
+    public static void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+        if (!mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
+            gui.setupOverlayRenderState(true, false);
+            renderArmorBar(gui, poseStack, width, height);
+        }
     }
     //account for ISpecialArmor, seems to be missing in 1.13+ forge
-    private int calculateArmorValue() {
+    private static int calculateArmorValue() {
         int currentArmorValue = mc.player.getArmorValue();
 
     /*    for (ItemStack itemStack : mc.player.getArmorInventoryList()) {
@@ -48,7 +49,7 @@ public class OverlayEventHandler implements IIngameOverlay {
       */  return currentArmorValue;
     }
 
-    public void renderArmorBar(ForgeIngameGui gui, PoseStack stack, int screenWidth, int screenHeight) {
+    public static void renderArmorBar(ForgeIngameGui gui, PoseStack stack, int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
         int yPosition = screenHeight - gui.left_height;
