@@ -3,6 +3,8 @@ package tfar.overpoweredarmorbar.overlay;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import tfar.overpoweredarmorbar.ConfigurationHandler;
@@ -11,8 +13,10 @@ import tfar.overpoweredarmorbar.ConfigurationHandler;
     Class which handles the render event and hides the vanilla armor bar
  */
 public class OverlayEventHandler {
-    public static void drawTexturedModalRect(PoseStack stack, int x, int y, int textureX, int textureY, int width, int height) {
-        Minecraft.getInstance().gui.blit(stack,x, y, textureX, textureY, width, height);
+
+    private static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
+    public static void drawTexturedModalRect(GuiGraphics stack, int x, int y, int textureX, int textureY, int width, int height) {
+        stack.blit(GUI_ICONS_LOCATION,x, y, textureX, textureY, width, height);
     }
 
     public OverlayEventHandler() {
@@ -32,7 +36,7 @@ public class OverlayEventHandler {
 
     // @SubscribeEvent(receiveCanceled = true)
     
-    public static void onRenderGameOverlayEventPre(PoseStack event) {
+    public static void onRenderGameOverlayEventPre(GuiGraphics event) {
         int scaledWidth = mc.getWindow().getGuiScaledWidth();
         int scaledHeight = mc.getWindow().getGuiScaledHeight();
         renderArmorBar(event,scaledWidth,scaledHeight);
@@ -42,7 +46,7 @@ public class OverlayEventHandler {
         return (int)mc.player.getAttribute(Attributes.ARMOR).getValue();
     }
 
-    public static void renderArmorBar(PoseStack stack,int screenWidth, int screenHeight) {
+    public static void renderArmorBar(GuiGraphics stack,int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
         int yPosition = getYOffset(screenHeight); // ForgeIngameGui.left_height - this doesn't exist on Fabric as Fabric doesn't replace the rendering code;
