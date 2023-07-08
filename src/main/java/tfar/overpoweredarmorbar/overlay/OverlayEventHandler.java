@@ -2,7 +2,10 @@ package tfar.overpoweredarmorbar.overlay;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.sun.jna.platform.win32.LMAccess;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -13,8 +16,11 @@ import tfar.overpoweredarmorbar.Configs;
     Class which handles the render event and hides the vanilla armor bar
  */
 public class OverlayEventHandler implements IGuiOverlay {
-    public static void drawTexturedModalRect(PoseStack stack, int x, int y, int textureX, int textureY, int width, int height) {
-        Minecraft.getInstance().gui.blit(stack,x, y, textureX, textureY, width, height);
+
+    protected static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
+
+    public static void drawTexturedModalRect(GuiGraphics stack, int x, int y, int textureX, int textureY, int width, int height) {
+        stack.blit(GUI_ICONS_LOCATION,x, y, textureX, textureY, width, height);
     }
 
     public OverlayEventHandler() {
@@ -33,7 +39,7 @@ public class OverlayEventHandler implements IGuiOverlay {
     private ArmorIcon[] armorIcons;
 
 
-    public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+    public void render(ForgeGui gui, GuiGraphics poseStack, float partialTick, int width, int height) {
         if (!gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements()) {
             gui.setupOverlayRenderState(true, false);
             renderArmorBar(gui, poseStack, width, height);
@@ -52,7 +58,7 @@ public class OverlayEventHandler implements IGuiOverlay {
       */  return currentArmorValue;
     }
 
-    public void renderArmorBar(ForgeGui gui, PoseStack stack, int screenWidth, int screenHeight) {
+    public void renderArmorBar(ForgeGui gui, GuiGraphics stack, int screenWidth, int screenHeight) {
         int currentArmorValue = calculateArmorValue();
         int xStart = screenWidth / 2 - 91;
         int yPosition = screenHeight - gui.leftHeight;
@@ -110,6 +116,7 @@ public class OverlayEventHandler implements IGuiOverlay {
             armorIconCounter++;
         }
         color4f(1, 1, 1, 1);
+        gui.leftHeight += 10;
     }
 
     private static void color4f(float r, float g, float b, float a){
