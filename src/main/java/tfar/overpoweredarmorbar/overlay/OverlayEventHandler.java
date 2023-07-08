@@ -110,6 +110,7 @@ public class OverlayEventHandler implements IGuiOverlay {
             armorIconCounter++;
         }
         color4f(1, 1, 1, 1);
+        gui.leftHeight += 10;
     }
 
     private static void color4f(float r, float g, float b, float a){
