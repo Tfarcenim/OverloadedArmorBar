@@ -1,7 +1,6 @@
 {
     "required": true,
     "package": "tfar.overpoweredarmorbar.mixins",
-    "refmap": "overloadedarmorbar-refmap.json",
     "minVersion": "0.6",
     "mixins": [    ],
     "client": [
