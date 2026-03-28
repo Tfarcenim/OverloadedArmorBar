@@ -1,9 +1,11 @@
 package tfar.overloadedarmorbar.overlay;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import tfar.overloadedarmorbar.platform.Services;
@@ -20,7 +22,7 @@ public class OverlayRenderer {
 
 
 
-    public static void renderArmorBar(GuiGraphics graphics) {
+    public static void renderArmorBar(GuiGraphicsExtractor graphics) {
         Entity entity = Minecraft.getInstance().getCameraEntity();
         if (entity instanceof Player player && Minecraft.getInstance().gameMode.canHurtPlayer() && !Minecraft.getInstance().options.hideGui) {
             int currentArmorValue = player.getArmorValue();
@@ -45,11 +47,11 @@ public class OverlayRenderer {
                         color4f(color.Red, color.Green, color.Blue, color.Alpha);
                         if (currentArmorValue > 20) {
                             //Draw the full icon as we have wrapped
-                            graphics.blitSprite(Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                         } else {
                             if (Services.PLATFORM.getConfig().showEmptyArmorIcons() && (Services.PLATFORM.getConfig().alwaysShowArmorBar() || currentArmorValue > 0)) {
                                 //Draw the empty armor icon
-                                graphics.blitSprite(Gui.ARMOR_EMPTY_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+                                graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_EMPTY_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                             }
                         }
                         break;
@@ -58,12 +60,12 @@ public class OverlayRenderer {
                         ArmorIconColor secondHalfColor = icon.secondaryArmorIconColor;
 
                         color4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
-                        graphics.blitSprite(Gui.ARMOR_HALF_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);//half
+                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_HALF_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);//half
 
                         color4f(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
                         if (currentArmorValue > 20) {
                             //Draw the second half as full as we have wrapped
-                            graphics.blitSprite(Gui.ARMOR_FULL_SPRITE,9,9,5,0, xPosition+5, yPosition,ARMOR_SECOND_HALF_ICON_SIZE,ARMOR_ICON_SIZE);
+                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE,9,9,5,0, xPosition+5, yPosition,ARMOR_SECOND_HALF_ICON_SIZE,ARMOR_ICON_SIZE);
                         } else {
                             //Draw the second half as empty
                     //        graphics.blitSprite(Gui.ARMOR_EMPTY_SPRITE, xPosition + 5, yPosition, ARMOR_SECOND_HALF_ICON_SIZE, ARMOR_ICON_SIZE);
@@ -72,7 +74,7 @@ public class OverlayRenderer {
                     case FULL:
                         ArmorIconColor fullColor = icon.primaryArmorIconColor;
                         color4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
-                        graphics.blitSprite(Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
                         break;
                     default:
                         break;
@@ -85,6 +87,6 @@ public class OverlayRenderer {
     }
 
     private static void color4f(float r, float g, float b, float a){
-        RenderSystem.setShaderColor(r,g, b, a);
+       // RenderSystem.setShaderColor(r,g, b, a);
     }
 }

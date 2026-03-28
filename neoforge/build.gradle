@@ -1,7 +1,6 @@
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev'
-    id "com.modrinth.minotaur" version "2.+"
 }
 
 neoForge {
@@ -11,10 +10,6 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
     runs {
         configureEach {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
@@ -22,24 +17,19 @@ neoForge {
         }
         client {
             client()
-        }
-        client2 {
-            client()
-            programArguments.addAll '--username', 'Dev1'
-            gameDirectory = project.file('run2')
+            gameDirectory = this.mkdir(this.file("runs/client"))
         }
         data {
-            data()
-            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-            // workingDirectory project.file('run-data')
-
+            clientData()
+            gameDirectory = this.mkdir(this.file("runs/data"))
+            // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll '--mod', project.mod_id, '--all',
-                    '--output', rootProject.project(":common").file('src/generated/resources/').getAbsolutePath(),
-                    '--existing', rootProject.project(":common").file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
         server {
             server()
+            this.file("runs/server").createParentDirectories()
+            gameDirectory = this.mkdir(this.file("runs/server"))
         }
     }
     mods {
@@ -49,29 +39,23 @@ neoForge {
     }
 }
 
-dependencies {
-    if (project.use_rei.toBoolean()) {
-        implementation "me.shedaniel:RoughlyEnoughItems-neoforge:$rei_version"
-        implementation "me.shedaniel.cloth:cloth-config-neoforge:$cloth_config_version"
-        implementation "dev.architectury:architectury-neoforge:$architectury_version"
-    }
-}
-
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN") // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
-    projectId = modrinth_project_id // This can be the project ID or the slug. Either will work!
-    versionNumber = "neoforge-$minecraft_version-$version" // You don't need to set this manually. Will fail if Modrinth has this version already
-    versionType = "release" // This is the default -- can also be `beta` or `alpha`
-    uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
-    gameVersions = [minecraft_version] // Must be an array, even with only one version
-    loaders = ["neoforge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-    dependencies { // A special DSL for creating dependencies
-        // scope.type
-        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
-        // The type can either be `project` or `version`
-        //required.project "fabric-api" // Creates a new required dependency on Fabric API
-        //   optional.version "sodium", "mc1.19.3-0.4.8" // Creates a new optional dependency on this specific version of Sodium
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant ->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
     }
 }
