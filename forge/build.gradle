@@ -74,6 +74,7 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
+    implementation fg.deobf("curse.maven:jei-238222:6600311")
 }
 
 tasks.withType(JavaCompile).configureEach {
