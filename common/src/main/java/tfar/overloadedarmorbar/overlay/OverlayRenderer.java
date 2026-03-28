@@ -43,50 +43,42 @@ public class OverlayRenderer {
                 int xPosition = xStart + armorIconCounter * 8;
                 switch (icon.armorIconType) {
                     case NONE:
-                        ArmorIconColor color = icon.primaryArmorIconColor;
-                        color4f(color.Red, color.Green, color.Blue, color.Alpha);
+                        int color = icon.primaryArmorIconColor;
                         if (currentArmorValue > 20) {
                             //Draw the full icon as we have wrapped
-                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE,color);
                         } else {
                             if (Services.PLATFORM.getConfig().showEmptyArmorIcons() && (Services.PLATFORM.getConfig().alwaysShowArmorBar() || currentArmorValue > 0)) {
                                 //Draw the empty armor icon
-                                graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_EMPTY_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+                                graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_EMPTY_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE,color);
                             }
                         }
                         break;
                     case HALF:
-                        ArmorIconColor firstHalfColor = icon.primaryArmorIconColor;
-                        ArmorIconColor secondHalfColor = icon.secondaryArmorIconColor;
+                        int firstHalfColor = icon.primaryArmorIconColor;
+                        int secondHalfColor = icon.secondaryArmorIconColor;
 
-                        color4f(firstHalfColor.Red, firstHalfColor.Green, firstHalfColor.Blue, firstHalfColor.Alpha);
-                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_HALF_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);//half
+                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_HALF_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE,firstHalfColor);//half
 
-                        color4f(secondHalfColor.Red, secondHalfColor.Green, secondHalfColor.Blue, secondHalfColor.Alpha);
                         if (currentArmorValue > 20) {
                             //Draw the second half as full as we have wrapped
-                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE,9,9,5,0, xPosition+5, yPosition,ARMOR_SECOND_HALF_ICON_SIZE,ARMOR_ICON_SIZE);
+                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE,9,9,5,0,
+                                    xPosition+5, yPosition,ARMOR_SECOND_HALF_ICON_SIZE,ARMOR_ICON_SIZE, secondHalfColor);
                         } else {
                             //Draw the second half as empty
                     //        graphics.blitSprite(Gui.ARMOR_EMPTY_SPRITE, xPosition + 5, yPosition, ARMOR_SECOND_HALF_ICON_SIZE, ARMOR_ICON_SIZE);
                         }
                         break;
                     case FULL:
-                        ArmorIconColor fullColor = icon.primaryArmorIconColor;
-                        color4f(fullColor.Red, fullColor.Green, fullColor.Blue, fullColor.Alpha);
-                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE);
+                        int fullColor = icon.primaryArmorIconColor;
+                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED,Gui.ARMOR_FULL_SPRITE, xPosition, yPosition, ARMOR_ICON_SIZE, ARMOR_ICON_SIZE,fullColor);
                         break;
                     default:
                         break;
                 }
                 armorIconCounter++;
             }
-            color4f(1, 1, 1, 1);
             Services.PLATFORM.offsetLeftHeight(Minecraft.getInstance().gui, 10);
         }
-    }
-
-    private static void color4f(float r, float g, float b, float a){
-       // RenderSystem.setShaderColor(r,g, b, a);
     }
 }

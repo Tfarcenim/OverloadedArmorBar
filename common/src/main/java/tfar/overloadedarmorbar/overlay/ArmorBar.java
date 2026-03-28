@@ -36,20 +36,20 @@ public class ArmorBar
         if (armorValue >= 1)
         {
             //Should be current tier color
-            icon.primaryArmorIconColor.setColorFromHex(colors.get(currentScale));
+            icon.setPrimaryColor(colors.get(currentScale));
         }
 
         //Covers 1 (HALF) - Secondary Color
         if (armorValue == 1)
         {
             //Should be previous tier color
-            icon.secondaryArmorIconColor.setColorFromHex(colors.get(previousScale));
+            icon.setSecondaryColor(colors.get(previousScale));
         }
 
         if (armorValue == 0)
         {
             //Should be previous tier color
-            icon.primaryArmorIconColor.setColorFromHex(colors.get(previousScale));
+            icon.setPrimaryColor(colors.get(previousScale));
         }
     }
 
